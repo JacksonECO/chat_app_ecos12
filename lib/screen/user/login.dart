@@ -1,7 +1,8 @@
 import 'package:ecos12_chat_app/app/app_color.dart';
 import 'package:ecos12_chat_app/components/box.dart';
 import 'package:ecos12_chat_app/components/button_circular.dart';
-import 'package:ecos12_chat_app/components/input_login.dart';
+import 'package:ecos12_chat_app/screen/user/components/input_login.dart';
+import 'package:ecos12_chat_app/screen/chat/conversation.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Image.asset(
               'assets/images/profile.png',
               height: 375,
+              width: double.infinity,
               filterQuality: FilterQuality.high,
               fit: BoxFit.fitHeight,
             ),
@@ -31,8 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
             ButtonCircular(
               colorButton: AppColor.greenTurquoise,
               text: 'Entrar',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen()),
+                );
+              },
             ),
+            Box(20),
           ],
         ),
       ),
