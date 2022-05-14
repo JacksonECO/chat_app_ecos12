@@ -1,3 +1,6 @@
+import 'package:ecos12_chat_app/class/date.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
+// import 'package:ecos12_chat_app/class/socket/web_socket_chat_html.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat_io.dart';
 import 'package:ecos12_chat_app/mobx/chat.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +13,8 @@ Future<void> main() async {
   // ChatStore chat = ChatStore(WebSocketChatHTML());
 
   GetIt.I.registerSingleton<ChatStore>(chat);
+  GetIt.I.registerSingleton<UserModel>(UserModel());
+  await Date.init();
   runApp(const MyApp());
 }
 

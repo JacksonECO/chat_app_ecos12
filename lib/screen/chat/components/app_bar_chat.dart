@@ -1,6 +1,8 @@
 import 'package:ecos12_chat_app/app/app_color.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/components/box.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class AppBarChat extends AppBar {
   AppBarChat({Key? key})
@@ -11,13 +13,18 @@ class AppBarChat extends AppBar {
           actions: [],
           toolbarHeight: 65,
           elevation: 15,
+          // automaticallyImplyLeading: false,
           title: Row(
             children: [
-              InkWell(
-                child: const Icon(Icons.arrow_back_ios, size: 25),
-                onTap: () {},
-              ),
-              Box(10),
+              // Builder(builder: (context) {
+              //   return InkWell(
+              //     child: const Icon(Icons.arrow_back_ios, size: 25),
+              //     onTap: () {
+              //       Navigator.of(context).pop();
+              //     },
+              //   );
+              // }),
+              // Box(10),
               CircleAvatar(
                 radius: 25,
                 backgroundImage: Image.network(
@@ -26,9 +33,9 @@ class AppBarChat extends AppBar {
                 ).image,
               ),
               Box(10),
-              const Text(
-                'Martha Craig',
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              Text(
+                GetIt.instance.get<UserModel>().nickname ?? 'Martha Craig',
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
               ),
             ],
           ),

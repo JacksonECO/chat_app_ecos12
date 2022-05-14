@@ -9,6 +9,13 @@ part of 'conversation.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ConversationStore on ConversationStoreBase, Store {
+  Computed<UserModel>? _$_userComputed;
+
+  @override
+  UserModel get _user =>
+      (_$_userComputed ??= Computed<UserModel>(() => super._user,
+              name: 'ConversationStoreBase._user'))
+          .value;
   Computed<List<Message>>? _$messageComputed;
 
   @override
@@ -48,7 +55,7 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   }
 
   @override
-  void addMessage(String data) {
+  void addMessage(Map<String, dynamic> data) {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
         name: 'ConversationStoreBase.addMessage');
     try {

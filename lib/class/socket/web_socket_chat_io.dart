@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 
 class WebSocketChatIO implements WebSocketChat {
@@ -21,17 +22,17 @@ class WebSocketChatIO implements WebSocketChat {
   }
 
   @override
-  Future<void> connect(String url) async {
+  Future<void> connect([String? url]) async {
     if (_socket != null) {
       await close();
     }
 
-    _socket = await WebSocket.connect(url);
+    _socket = await WebSocket.connect(url ?? ('ws://' + Rest.urlBase)).timeout(const Duration(seconds: 5));
 
-    send({
-      'type': 'Start',
-      'id': 'io',
-    });
+    // send({
+    //   'type': 'Start',
+    //   'id': 'io',
+    // });
   }
 
   @override
@@ -56,15 +57,3 @@ class WebSocketChatIO implements WebSocketChat {
     _socket!.add(json.encode(data));
   }
 }
-
-
-/*
-
-var s = await WebSocket.connect('ws://192.168.1.108:3001');
-s.add('Start');
-s.listen((event) {
-  print(event);
-});
-
-
-*/

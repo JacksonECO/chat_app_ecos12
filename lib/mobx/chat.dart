@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/mobx/conversation.dart';
 import 'package:mobx/mobx.dart';
@@ -6,10 +9,8 @@ part 'chat.g.dart';
 class ChatStore = _ChatStoreBase with _$ChatStore;
 
 abstract class _ChatStoreBase with Store {
-  static const String url = 'ws://164.92.104.69:80';
-
   _ChatStoreBase(this.typeWebSocketChat) {
-    _conversation.add(ConversationStore('123'));
+    _conversation.add(ConversationStore('first'));
   }
 
   late WebSocketChat typeWebSocketChat;
@@ -31,11 +32,13 @@ abstract class _ChatStoreBase with Store {
     if (_socketChat != null) await _socketChat!.close();
 
     _socketChat = typeWebSocketChat;
-    await _socketChat!.connect(url).timeout(Duration(seconds: 5));
+    await _socketChat!.connect();
 
-    _socketChat!.listen((message) {
-      // _conversation.first.addMessage(message);
-      print(message);
+    _socketChat!.listen((message) async {
+      _conversation.first.addMessage({
+        ...json.decode(json.decode(message)),
+        'date': (await Rest.get())['timestamp'],
+      });
     });
   }
 

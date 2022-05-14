@@ -1,10 +1,10 @@
-import 'package:ecos12_chat_app/class/mixin/date.dart';
+import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/components/box.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecos12_chat_app/class/model/message.dart';
 
-class MessageTile extends StatelessWidget with Date {
+class MessageTile extends StatelessWidget {
   final Message message;
   const MessageTile({
     Key? key,
@@ -33,10 +33,15 @@ class MessageTile extends StatelessWidget with Date {
               style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Box(5),
-            Text(
-              dateHours(message.date),
-              style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
-            ),
+            message.date == null
+                ? Box(10,
+                    child: const CircularProgressIndicator(
+                      strokeWidth: 1,
+                    ))
+                : Text(
+                    Date.hoursWithSeconds(message.date!),
+                    style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
+                  ),
           ],
         ),
 

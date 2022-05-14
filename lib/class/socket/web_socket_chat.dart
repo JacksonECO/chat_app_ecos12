@@ -7,7 +7,7 @@ abstract class WebSocketChat {
 
   late bool isWeb;
 
-  Future<void> connect(String url);
+  Future<void> connect([String? url]);
 
   void listen(void Function(dynamic message) onData);
 

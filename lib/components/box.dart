@@ -7,16 +7,15 @@ enum BoxType {
 }
 
 class Box extends SizedBox {
-  final double tam;
-  final BoxType type;
-
   const Box(
-    this.tam, [
-    this.type = BoxType.all,
+    double tam, {
+    BoxType type = BoxType.all,
+    Widget? child,
     Key? key,
-  ]) : super(
+  }) : super(
           key: key,
           height: type == BoxType.horizontal ? 0 : tam,
           width: type == BoxType.vertical ? 0 : tam,
+          child: child,
         );
 }

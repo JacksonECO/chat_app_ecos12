@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 
 class WebSocketChatHTML implements WebSocketChat {
@@ -9,35 +10,37 @@ class WebSocketChatHTML implements WebSocketChat {
 
   WebSocket? _socket;
 
+  StreamSubscription<MessageEvent>? _streamSubscription;
+
   @override
   bool isWeb = true;
 
   @override
   Future<void> close([int? code]) async {
-    //! Web não funcional
-    // if (_socket != null) {
-    //   _socket!.close(code);
-    //   _socket = null;
-    // }
+    if (_socket != null) {
+      print('Closing connection');
+      await _streamSubscription?.cancel();
+      _socket = null;
+    }
   }
 
   @override
-  Future<void> connect(String url) async {
+  Future<void> connect([String? url]) async {
     if (_socket != null) {
       await close();
     }
-    _socket = WebSocket(url);
+    _socket = WebSocket(url ?? ('ws://' + Rest.urlBase));
     bool start = false;
 
-    _socket!.onClose.listen((event) {
-      print('Servidor Caiu');
+    _socket!.onClose.listen((event) async {
+      print('Connect closed');
     });
 
     var init = _socket!.onOpen.listen((event) {
-      send({
-        'type': 'Start',
-        'id': 'html',
-      });
+      // send({
+      //   'type': 'Start',
+      //   'id': 'html',
+      // });
       start = true;
     });
 
@@ -53,7 +56,7 @@ class WebSocketChatHTML implements WebSocketChat {
   void listen(void Function(dynamic message) onData) {
     if (_socket == null) throw 'Connect is close';
 
-    _socket!.onMessage.listen(
+    _streamSubscription = _socket!.onMessage.listen(
       (messageEvent) {
         onData(messageEvent.data);
       },
@@ -62,10 +65,10 @@ class WebSocketChatHTML implements WebSocketChat {
         print('Connect closed');
       },
       onError: (a) {
+        _socket = null;
         throw a;
       },
     );
-    MessageEvent a;
   }
 
   @override
