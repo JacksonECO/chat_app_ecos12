@@ -7,7 +7,7 @@ abstract class Login {
   static signIn({required String registry, required String password}) async {
     try {
       var response = await Rest.post(rota: '/login', body: {
-        'registry': registry == '' ? '0123456789' : registry,
+        'registry': registry == '' ? '123' : registry,
         'password': password == '' ? '123' : password,
       });
 

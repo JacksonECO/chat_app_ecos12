@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
               colorButton: AppColor.greenTurquoise,
               text: 'Entrar',
               onTap: () async {
-                var loginOk = await Login.signIn(registry: emailController.text, password: '123');
+                var loginOk = await Login.signIn(registry: emailController.text, password: passwordController.text);
                 if (loginOk) {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen()),
