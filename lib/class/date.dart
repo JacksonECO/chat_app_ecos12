@@ -2,7 +2,6 @@ import 'package:ecos12_chat_app/class/rest.dart';
 
 abstract class Date {
   static Duration errorTime = const Duration();
-  static bool isErrorPositive = true;
 
   static String hoursWithSeconds(DateTime date) {
     var _date = dateLocate(date);

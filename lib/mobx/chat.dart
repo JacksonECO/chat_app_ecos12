@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/mobx/conversation.dart';
 import 'package:mobx/mobx.dart';
