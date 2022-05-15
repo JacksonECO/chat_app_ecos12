@@ -13,6 +13,16 @@ abstract class ConversationStoreBase with Store {
 
   ConversationStoreBase(this.id);
 
+  @observable
+  ScrollController controllerScroll = ScrollController();
+
+  @action
+  void upScroll() {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      controllerScroll.jumpTo(controllerScroll.positions.last.maxScrollExtent);
+    });
+  }
+
   @computed
   UserModel get _user => GetIt.instance.get<UserModel>();
 
@@ -55,5 +65,6 @@ abstract class ConversationStoreBase with Store {
     }
     print(newMessage);
     _message.add(newMessage);
+    upScroll();
   }
 }

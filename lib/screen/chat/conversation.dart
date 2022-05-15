@@ -18,6 +18,7 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   ChatStore store = GetIt.instance.get<ChatStore>();
+  ScrollController controllerScroll = ScrollController();
 
   @override
   void initState() {
@@ -48,18 +49,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
           ),
           Column(
             children: [
-              Box(5),
+              Box(3),
               Observer(builder: (_) {
                 return Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: store.conversation.first.message.length,
-                    itemBuilder: (context, index) => MessageTile(message: store.conversation.first.message[index]),
+                  child: ScrollConfiguration(
+                    behavior: const ScrollBehavior(),
+                    child: ListView.builder(
+                      controller: store.conversation.first.controllerScroll,
+                      shrinkWrap: true,
+                      itemCount: store.conversation.first.message.length,
+                      itemBuilder: (context, index) => MessageTile(message: store.conversation.first.message[index]),
+                    ),
                   ),
                 );
               }),
               InputTextMessage(
-                sendOnTap: store.conversation.first.sendOnTap,
+                conversationStore: store.conversation.first,
               ),
             ],
           ),

@@ -1,10 +1,4 @@
 abstract class WebSocketChat {
-  factory WebSocketChat(WebSocketChat webSocketChat) {
-    // return WebSocketChatHTML();
-    // return WebSocketChatIO();
-    return webSocketChat;
-  }
-
   static const Duration pingInterval = Duration(seconds: 30);
 
   late bool isWeb;
