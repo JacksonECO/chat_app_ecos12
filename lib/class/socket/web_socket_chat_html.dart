@@ -41,6 +41,7 @@ class WebSocketChatHTML implements WebSocketChat {
       //   'type': 'Start',
       //   'id': 'html',
       // });
+      _startPing();
       start = true;
     });
 
@@ -75,5 +76,13 @@ class WebSocketChatHTML implements WebSocketChat {
   void send(Map dataStart) {
     if (_socket == null) throw 'Connect is close';
     _socket!.sendString(json.encode(dataStart));
+  }
+
+  void _startPing() async {
+    while (true) {
+      if (_socket == null) return;
+      _socket!.sendString('{}');
+      await Future.delayed(WebSocketChat.pingInterval);
+    }
   }
 }

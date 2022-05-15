@@ -33,13 +33,13 @@ class MessageTile extends StatelessWidget {
               style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Box(5),
-            message.date == null
+            message.timestamp == null
                 ? Box(10,
                     child: const CircularProgressIndicator(
                       strokeWidth: 1,
                     ))
                 : Text(
-                    Date.hoursWithSeconds(message.date!),
+                    Date.hoursWithSeconds(message.timestamp!),
                     style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
                   ),
           ],

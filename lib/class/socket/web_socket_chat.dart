@@ -5,6 +5,8 @@ abstract class WebSocketChat {
     return webSocketChat;
   }
 
+  static const Duration pingInterval = Duration(seconds: 30);
+
   late bool isWeb;
 
   Future<void> connect([String? url]);

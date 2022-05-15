@@ -5,7 +5,7 @@ class Message {
   String text;
   String nameFrom;
   String idFrom;
-  DateTime? date;
+  DateTime? timestamp;
   bool isSender;
 
   Message({
@@ -13,7 +13,7 @@ class Message {
     required this.text,
     required this.nameFrom,
     required this.idFrom,
-    this.date,
+    this.timestamp,
     required this.isSender,
   });
 
@@ -22,7 +22,7 @@ class Message {
     String? text,
     String? nameFrom,
     String? idFrom,
-    DateTime? date,
+    DateTime? timestamp,
     bool? isSender,
   }) {
     return Message(
@@ -30,7 +30,7 @@ class Message {
       text: text ?? this.text,
       nameFrom: nameFrom ?? this.nameFrom,
       idFrom: idFrom ?? this.idFrom,
-      date: date ?? this.date,
+      timestamp: timestamp ?? this.timestamp,
       isSender: isSender ?? this.isSender,
     );
   }
@@ -41,7 +41,7 @@ class Message {
       'text': text,
       'nameFrom': nameFrom,
       'idFrom': idFrom,
-      'date': date?.millisecondsSinceEpoch,
+      'timestamp': timestamp?.millisecondsSinceEpoch,
       'isSender': isSender,
     };
   }
@@ -52,7 +52,7 @@ class Message {
       text: map['text'] ?? '',
       nameFrom: map['nameFrom'] ?? '',
       idFrom: map['idFrom'] ?? '',
-      date: map['date'] != null ? DateTime.fromMillisecondsSinceEpoch(map['date']) : null,
+      timestamp: map['timestamp'] != null ? DateTime.fromMillisecondsSinceEpoch(map['timestamp']) : null,
       isSender: map['isSender'] ?? false,
     );
   }
@@ -63,29 +63,24 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(id: $id, text: $text, nameFrom: $nameFrom, idFrom: $idFrom, date: $date, isSender: $isSender)';
+    return 'Message(id: $id, text: $text, nameFrom: $nameFrom, idFrom: $idFrom, timestamp: $timestamp, isSender: $isSender)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Message &&
-      other.id == id &&
-      other.text == text &&
-      other.nameFrom == nameFrom &&
-      other.idFrom == idFrom &&
-      other.date == date &&
-      other.isSender == isSender;
+        other.id == id &&
+        other.text == text &&
+        other.nameFrom == nameFrom &&
+        other.idFrom == idFrom &&
+        other.timestamp == timestamp &&
+        other.isSender == isSender;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-      text.hashCode ^
-      nameFrom.hashCode ^
-      idFrom.hashCode ^
-      date.hashCode ^
-      isSender.hashCode;
+    return id.hashCode ^ text.hashCode ^ nameFrom.hashCode ^ idFrom.hashCode ^ timestamp.hashCode ^ isSender.hashCode;
   }
 }

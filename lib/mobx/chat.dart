@@ -35,10 +35,7 @@ abstract class _ChatStoreBase with Store {
     await _socketChat!.connect();
 
     _socketChat!.listen((message) async {
-      _conversation.first.addMessage({
-        ...json.decode(json.decode(message)),
-        'date': (await Rest.get())['timestamp'],
-      });
+      _conversation.first.addMessage(json.decode(message));
     });
   }
 

@@ -29,6 +29,8 @@ class WebSocketChatIO implements WebSocketChat {
 
     _socket = await WebSocket.connect(url ?? ('ws://' + Rest.urlBase)).timeout(const Duration(seconds: 5));
 
+    _socket!.pingInterval = WebSocketChat.pingInterval;
+
     // send({
     //   'type': 'Start',
     //   'id': 'io',

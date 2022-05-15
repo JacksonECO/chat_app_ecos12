@@ -45,7 +45,7 @@ abstract class ConversationStoreBase with Store {
 
     newMessage.isSender = _user.id == newMessage.idFrom;
 
-    if (newMessage.isSender == true && newMessage.date != null) {
+    if (newMessage.isSender == true && newMessage.timestamp != null) {
       for (var i = message.length - 1; i >= 0; i--) {
         if (message[i].text == newMessage.text) {
           _message.removeAt(i);
