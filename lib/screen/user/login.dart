@@ -14,12 +14,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var emailController = TextEditingController();
+  var registryController = TextEditingController();
   var passwordController = TextEditingController();
 
   @override
   void dispose() {
-    emailController.dispose();
+    registryController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -32,16 +32,16 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Image.asset(
               'assets/images/profile.png',
-              height: 375,
+              height: 400,
               width: double.infinity,
               filterQuality: FilterQuality.high,
               fit: BoxFit.fitHeight,
             ),
             Box(30),
             InputTextLogin(
-              title: 'Email',
-              iconData: Icons.email_outlined,
-              controller: emailController,
+              title: 'Matrícula',
+              iconData: Icons.how_to_reg,
+              controller: registryController,
             ),
             InputTextLogin(
               title: 'Senha',
@@ -53,11 +53,20 @@ class _LoginScreenState extends State<LoginScreen> {
               colorButton: AppColor.greenTurquoise,
               text: 'Entrar',
               onTap: () async {
-                var loginOk = await Login.signIn(registry: emailController.text, password: passwordController.text);
-                if (loginOk) {
+                var loginError =
+                    await Login.signIn(registry: registryController.text, password: passwordController.text);
+                if (loginError == null) {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen()),
                   );
+                } else {
+                  var snackBar = SnackBar(
+                    content: Text(loginError),
+                    backgroundColor: Colors.redAccent,
+                    duration: const Duration(seconds: 2),
+                  );
+                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
               },
             ),

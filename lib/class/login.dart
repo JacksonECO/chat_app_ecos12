@@ -3,7 +3,7 @@ import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:get_it/get_it.dart';
 
 abstract class Login {
-  static signIn({required String registry, required String password}) async {
+  static Future<String?> signIn({required String registry, required String password}) async {
     try {
       var response = await Rest.post(rota: '/login', body: {
         'registry': registry == '' ? '0102030405' : registry,
@@ -12,10 +12,10 @@ abstract class Login {
 
       GetIt.I.get<UserModel>().update(UserModel.fromMap(response));
 
-      return true;
+      return null;
     } catch (e) {
       print(e);
-      return false;
+      return 'Acesso Negado!';
     }
   }
 }
