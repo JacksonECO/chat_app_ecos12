@@ -1,20 +1,15 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 abstract class DotEnvApp {
-  static Future<void> init() async {
-    await dotenv.load();
-  }
+  static const String _null = 'null';
 
-  static String _get(String _var) {
-    if (!dotenv.isInitialized) {
-      throw 'DotEnv do not started';
-    }
-    try {
-      return dotenv.maybeGet(_var)!;
-    } catch (e) {
-      throw 'Variable not exists';
+  static void init() {
+    for (var element in [
+      urlBase,
+    ]) {
+      if (element == _null) {
+        throw 'DotEnvApp: Variable not exists';
+      }
     }
   }
 
-  static  String get urlBase => _get('urlBase');
+  static const String urlBase = String.fromEnvironment('urlBase', defaultValue: _null);
 }

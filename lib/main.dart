@@ -16,7 +16,7 @@ void main() {
 }
 
 Future<void> start(WebSocketChat webSocketChat) async {
-  await DotEnvApp.init();
+  DotEnvApp.init();
   await Date.init();
 
   ChatStore chat = ChatStore(webSocketChat);
