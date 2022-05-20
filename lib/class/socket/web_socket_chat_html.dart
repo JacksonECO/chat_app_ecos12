@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
-import 'package:ecos12_chat_app/class/rest.dart';
+import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 
 class WebSocketChatHTML implements WebSocketChat {
@@ -29,7 +29,7 @@ class WebSocketChatHTML implements WebSocketChat {
     if (_socket != null) {
       await close();
     }
-    _socket = WebSocket(url ?? ('ws://' + Rest.urlBase));
+    _socket = WebSocket(url ?? ('wss://' + DotEnvApp.urlBase));
     bool start = false;
 
     _socket!.onClose.listen((event) async {

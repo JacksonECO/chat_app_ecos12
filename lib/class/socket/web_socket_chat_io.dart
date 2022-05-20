@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ecos12_chat_app/class/rest.dart';
+import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 
 class WebSocketChatIO implements WebSocketChat {
@@ -27,7 +27,7 @@ class WebSocketChatIO implements WebSocketChat {
       await close();
     }
 
-    _socket = await WebSocket.connect(url ?? ('ws://' + Rest.urlBase)).timeout(const Duration(seconds: 5));
+    _socket = await WebSocket.connect(url ?? ('wss://' + DotEnvApp.urlBase)).timeout(const Duration(seconds: 5));
 
     _socket!.pingInterval = WebSocketChat.pingInterval;
 

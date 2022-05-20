@@ -20,7 +20,7 @@ abstract class Date {
     return date.toLocal().add(errorTime);
   }
 
-  static init() async {
+  static Future<void> init() async {
     var milliseconds = (await Rest.get())['timestamp'];
 
     var locate = DateTime.now().toUtc();

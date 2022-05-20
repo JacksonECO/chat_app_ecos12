@@ -1,3 +1,4 @@
+import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat_html.dart';
@@ -9,12 +10,14 @@ import 'package:ecos12_chat_app/screen/user/login.dart';
 import 'package:get_it/get_it.dart';
 
 Future<void> main() async {
+  await DotEnvApp.init();
+  await Date.init();
+
   // ChatStore chat = ChatStore(WebSocketChatIO());
   ChatStore chat = ChatStore(WebSocketChatHTML());
 
   GetIt.I.registerSingleton<ChatStore>(chat);
   GetIt.I.registerSingleton<UserModel>(UserModel());
-  await Date.init();
   runApp(const MyApp());
 }
 
@@ -24,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Chat UNIFEI',
       home: LoginScreen(),
     );
