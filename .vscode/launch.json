@@ -5,17 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ecos12_chat_app",
-            "request": "launch",
-            "type": "dart",
-            
-        },
-        {
-            "name": "ecos12_chat_app WEB",
+            "name": "App",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
-            "args": ["-d", "chrome", "--web-renderer=html"]
+            "args": ["--target=lib/main_io.dart"]
+        },
+        {
+            "name": "Web",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args": ["-d", "chrome", "--web-renderer=html", "--target=lib/main_web.dart"],
         },
     ]
 }

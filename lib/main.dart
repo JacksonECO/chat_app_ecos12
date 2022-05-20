@@ -1,20 +1,25 @@
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
-import 'package:ecos12_chat_app/class/socket/web_socket_chat_html.dart';
-// import 'package:ecos12_chat_app/class/socket/web_socket_chat_io.dart';
+import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/mobx/chat.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ecos12_chat_app/screen/user/login.dart';
 import 'package:get_it/get_it.dart';
 
-Future<void> main() async {
+void main() {
+  throw '''
+    For start use "flutter run --target=lib/main_io.dart" or
+    "flutter run -d chrome --web-renderer=html --target=lib/main_web.dart
+  ''';
+}
+
+Future<void> start(WebSocketChat webSocketChat) async {
   await DotEnvApp.init();
   await Date.init();
 
-  // ChatStore chat = ChatStore(WebSocketChatIO());
-  ChatStore chat = ChatStore(WebSocketChatHTML());
+  ChatStore chat = ChatStore(webSocketChat);
 
   GetIt.I.registerSingleton<ChatStore>(chat);
   GetIt.I.registerSingleton<UserModel>(UserModel());
