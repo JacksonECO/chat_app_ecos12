@@ -69,7 +69,7 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       ActionController(name: '_ChatStoreBase', context: context);
 
   @override
-  void sendMessage(Map<dynamic, dynamic> data) {
+  void sendMessage(Message data) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
         name: '_ChatStoreBase.sendMessage');
     try {

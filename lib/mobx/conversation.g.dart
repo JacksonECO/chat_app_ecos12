@@ -24,6 +24,22 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
               name: 'ConversationStoreBase.message'))
           .value;
 
+  late final _$controllerScrollAtom =
+      Atom(name: 'ConversationStoreBase.controllerScroll', context: context);
+
+  @override
+  ScrollController get controllerScroll {
+    _$controllerScrollAtom.reportRead();
+    return super.controllerScroll;
+  }
+
+  @override
+  set controllerScroll(ScrollController value) {
+    _$controllerScrollAtom.reportWrite(value, super.controllerScroll, () {
+      super.controllerScroll = value;
+    });
+  }
+
   late final _$_messageAtom =
       Atom(name: 'ConversationStoreBase._message', context: context);
 
@@ -44,6 +60,28 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
       ActionController(name: 'ConversationStoreBase', context: context);
 
   @override
+  void upScroll() {
+    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
+        name: 'ConversationStoreBase.upScroll');
+    try {
+      return super.upScroll();
+    } finally {
+      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void orderByMessage() {
+    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
+        name: 'ConversationStoreBase.orderByMessage');
+    try {
+      return super.orderByMessage();
+    } finally {
+      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void sendOnTap(TextEditingController _controller) {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
         name: 'ConversationStoreBase.sendOnTap');
@@ -55,11 +93,11 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   }
 
   @override
-  void addMessage(Map<String, dynamic> data) {
+  void addMessage(Message newMessage) {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
         name: 'ConversationStoreBase.addMessage');
     try {
-      return super.addMessage(data);
+      return super.addMessage(newMessage);
     } finally {
       _$ConversationStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -68,6 +106,7 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   @override
   String toString() {
     return '''
+controllerScroll: ${controllerScroll},
 message: ${message}
     ''';
   }

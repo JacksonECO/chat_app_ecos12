@@ -38,11 +38,11 @@ class WebSocketChatIO implements WebSocketChat {
   }
 
   @override
-  void listen(void Function(dynamic message) onData) {
+  void listen(void Function(Map<String, dynamic> message) onData) {
     if (_socket == null) throw 'Connect is close';
 
     _socket!.listen(
-      onData,
+      (input) => onData(json.decode(input)),
       onDone: () {
         _socket = null;
         print('Connect closed');
@@ -54,8 +54,11 @@ class WebSocketChatIO implements WebSocketChat {
   }
 
   @override
-  void send(Map data) {
+  void send(Map<String, dynamic> data) {
     if (_socket == null) throw 'Connect is close';
     _socket!.add(json.encode(data));
   }
+
+  @override
+  WebSocketChat clone() => WebSocketChatIO();
 }

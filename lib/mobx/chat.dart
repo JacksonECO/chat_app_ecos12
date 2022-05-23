@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:ecos12_chat_app/class/model/message.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/mobx/conversation.dart';
 import 'package:mobx/mobx.dart';
@@ -9,7 +8,7 @@ class ChatStore = _ChatStoreBase with _$ChatStore;
 
 abstract class _ChatStoreBase with Store {
   _ChatStoreBase(this.typeWebSocketChat) {
-    _conversation.add(ConversationStore('first'));
+    _conversation.add(ConversationStore('first', true));
   }
 
   late WebSocketChat typeWebSocketChat;
@@ -34,14 +33,14 @@ abstract class _ChatStoreBase with Store {
     await _socketChat!.connect();
 
     _socketChat!.listen((message) async {
-      _conversation.first.addMessage(json.decode(message));
+      _conversation.first.addMessage(Message.fromMap(message));
     });
   }
 
   @action
-  void sendMessage(Map data) {
+  void sendMessage(Message data) {
     if (_socketChat == null) print('Sem Conexão');
-    _socketChat!.send(data);
+    _socketChat!.send(data.sendToMap());
   }
 
   @action

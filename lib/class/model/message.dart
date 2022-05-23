@@ -46,6 +46,14 @@ class Message {
     };
   }
 
+  Map<String, dynamic> sendToMap() {
+    return {
+      'text': text,
+      'nameFrom': nameFrom,
+      'idFrom': idFrom,
+    };
+  }
+
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
       id: map['id'],

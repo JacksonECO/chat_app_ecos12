@@ -5,9 +5,11 @@ abstract class WebSocketChat {
 
   Future<void> connect([String? url]);
 
-  void listen(void Function(dynamic message) onData);
+  void listen(void Function(Map<String, dynamic> message) onData);
 
   Future<void> close([int? code]);
 
-  void send(Map data);
+  void send(Map<String, dynamic> data);
+
+  WebSocketChat clone();
 }

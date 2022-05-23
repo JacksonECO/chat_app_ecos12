@@ -9,9 +9,10 @@ part 'conversation.g.dart';
 class ConversationStore = ConversationStoreBase with _$ConversationStore;
 
 abstract class ConversationStoreBase with Store {
-  late String id;
+  late final String id;
+  late final bool isGroup;
 
-  ConversationStoreBase(this.id);
+  ConversationStoreBase(this.id, this.isGroup);
 
   @observable
   ScrollController controllerScroll = ScrollController();
@@ -36,25 +37,35 @@ abstract class ConversationStoreBase with Store {
   }
 
   @action
+  void orderByMessage() {
+    message.sort(((a, b) {
+      if (a.timestamp == b.timestamp) return 0;
+
+      if (a.timestamp == null) return 1;
+      if (b.timestamp == null) return -1;
+
+      if (a.timestamp!.isAfter(b.timestamp!)) return 1;
+      return -1;
+    }));
+  }
+
+  @action
   void sendOnTap(TextEditingController _controller) {
     if (_controller.text == '') return;
-    var temp = Message(text: _controller.text, isSender: true, idFrom: _user.id!, nameFrom: _user.nickname!);
+    var newMessage = Message(text: _controller.text, isSender: true, idFrom: _user.id!, nameFrom: _user.nickname!);
+
+    // Limpa o campo de texto
     _controller.text = '';
 
-    var newMessage = temp.toMap();
-
     addMessage(newMessage);
-
-    newMessage.remove('isSender');
     GetIt.instance.get<ChatStore>().sendMessage(newMessage);
   }
 
   @action
-  void addMessage(Map<String, dynamic> data) {
-    var newMessage = Message.fromMap(data);
-
+  void addMessage(Message newMessage) {
     newMessage.isSender = _user.id == newMessage.idFrom;
 
+    /// Para quando é recebido a confirmação de envio da mensagem
     if (newMessage.isSender == true && newMessage.timestamp != null) {
       for (var i = message.length - 1; i >= 0; i--) {
         if (message[i].text == newMessage.text) {
@@ -63,8 +74,10 @@ abstract class ConversationStoreBase with Store {
         }
       }
     }
+
     print(newMessage);
     _message.add(newMessage);
+    orderByMessage();
     upScroll();
   }
 }

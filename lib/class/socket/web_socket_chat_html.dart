@@ -54,26 +54,25 @@ class WebSocketChatHTML implements WebSocketChat {
   }
 
   @override
-  void listen(void Function(dynamic message) onData) {
+  void listen(void Function(Map<String, dynamic> message) onData) {
     if (_socket == null) throw 'Connect is close';
 
     _streamSubscription = _socket!.onMessage.listen(
       (messageEvent) {
-        onData(messageEvent.data);
+        onData(json.decode(messageEvent.data));
       },
       onDone: () {
         _socket = null;
         print('Connect closed');
       },
       onError: (a) {
-        _socket = null;
         throw a;
       },
     );
   }
 
   @override
-  void send(Map dataStart) {
+  void send(Map<String, dynamic> dataStart) {
     if (_socket == null) throw 'Connect is close';
     _socket!.sendString(json.encode(dataStart));
   }
@@ -81,8 +80,11 @@ class WebSocketChatHTML implements WebSocketChat {
   void _startPing() async {
     while (true) {
       if (_socket == null) return;
-      _socket!.sendString('{}');
       await Future.delayed(WebSocketChat.pingInterval);
+      _socket!.sendString('{}');
     }
   }
+
+  @override
+  WebSocketChat clone() => WebSocketChatHTML();
 }
