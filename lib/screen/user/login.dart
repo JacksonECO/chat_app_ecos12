@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     await Login.signIn(registry: registryController.text, password: passwordController.text);
                 if (loginError == null) {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen()),
+                    MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen('first')),
                   );
                 } else {
                   var snackBar = SnackBar(

@@ -16,10 +16,15 @@ abstract class _ChatStoreBase with Store {
   @observable
   ObservableList<ConversationStore> _conversation = <ConversationStore>[].asObservable();
   @computed
-  List<ConversationStore> get conversation => _conversation.toList();
+  List<ConversationStore> get listConversation => _conversation.toList();
   @computed
   set conversation(List<ConversationStore> conversation) {
     _conversation = conversation.asObservable();
+  }
+
+  @action
+  ConversationStore? getConversation(String idConversation) {
+    return listConversation.firstWhere((element) => element.id == idConversation, orElse: null);
   }
 
   @observable

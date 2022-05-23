@@ -1,14 +1,18 @@
-import 'package:ecos12_chat_app/components/box.dart';
-import 'package:ecos12_chat_app/mobx/chat.dart';
-import 'package:ecos12_chat_app/screen/chat/components/message_tile.dart';
+import 'package:ecos12_chat_app/mobx/conversation.dart';
 import 'package:flutter/material.dart';
-import 'package:ecos12_chat_app/screen/chat/components/app_bar_chat.dart';
-import 'package:ecos12_chat_app/screen/chat/components/input_text_message.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import 'package:ecos12_chat_app/components/box.dart';
+import 'package:ecos12_chat_app/mobx/chat.dart';
+import 'package:ecos12_chat_app/screen/chat/components/app_bar_chat.dart';
+import 'package:ecos12_chat_app/screen/chat/components/input_text_message.dart';
+import 'package:ecos12_chat_app/screen/chat/components/message_tile.dart';
+
 class ConversationScreen extends StatefulWidget {
-  const ConversationScreen({
+  final String idConversation;
+  const ConversationScreen(
+    this.idConversation, {
     Key? key,
   }) : super(key: key);
 
@@ -18,11 +22,12 @@ class ConversationScreen extends StatefulWidget {
 
 class _ConversationScreenState extends State<ConversationScreen> {
   ChatStore store = GetIt.instance.get<ChatStore>();
-  ScrollController controllerScroll = ScrollController();
+  late final ConversationStore conversation;
 
   @override
   void initState() {
     store.startWebSocket();
+    conversation = store.getConversation(widget.idConversation)!;
     super.initState();
   }
 
@@ -55,16 +60,18 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   child: ScrollConfiguration(
                     behavior: const ScrollBehavior(),
                     child: ListView.builder(
-                      controller: store.conversation.first.controllerScroll,
+                      reverse: true,
+                      controller: conversation.controllerScroll,
+                      semanticChildCount: conversation.listMessage.length,
                       shrinkWrap: true,
-                      itemCount: store.conversation.first.message.length,
-                      itemBuilder: (context, index) => MessageTile(message: store.conversation.first.message[index]),
+                      itemCount: conversation.listMessage.length,
+                      itemBuilder: (context, index) => MessageTile(message: conversation.listMessage[index]),
                     ),
                   ),
                 );
               }),
               InputTextMessage(
-                conversationStore: store.conversation.first,
+                conversationStore: conversation,
               ),
             ],
           ),

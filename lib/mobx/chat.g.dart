@@ -9,13 +9,14 @@ part of 'chat.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ChatStore on _ChatStoreBase, Store {
-  Computed<List<ConversationStore>>? _$conversationComputed;
+  Computed<List<ConversationStore>>? _$listConversationComputed;
 
   @override
-  List<ConversationStore> get conversation => (_$conversationComputed ??=
-          Computed<List<ConversationStore>>(() => super.conversation,
-              name: '_ChatStoreBase.conversation'))
-      .value;
+  List<ConversationStore> get listConversation =>
+      (_$listConversationComputed ??= Computed<List<ConversationStore>>(
+              () => super.listConversation,
+              name: '_ChatStoreBase.listConversation'))
+          .value;
 
   late final _$_conversationAtom =
       Atom(name: '_ChatStoreBase._conversation', context: context);
@@ -69,6 +70,17 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       ActionController(name: '_ChatStoreBase', context: context);
 
   @override
+  ConversationStore? getConversation(String idConversation) {
+    final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
+        name: '_ChatStoreBase.getConversation');
+    try {
+      return super.getConversation(idConversation);
+    } finally {
+      _$_ChatStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void sendMessage(Message data) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
         name: '_ChatStoreBase.sendMessage');
@@ -82,7 +94,7 @@ mixin _$ChatStore on _ChatStoreBase, Store {
   @override
   String toString() {
     return '''
-conversation: ${conversation}
+listConversation: ${listConversation}
     ''';
   }
 }

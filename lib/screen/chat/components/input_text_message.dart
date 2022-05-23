@@ -48,7 +48,6 @@ class _InputTextMessageState extends State<InputTextMessage> {
                 ),
                 maxLines: 3,
                 minLines: 1,
-                onTap: widget.conversationStore.upScroll,
               ),
             ),
           ),

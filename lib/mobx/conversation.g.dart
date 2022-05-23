@@ -16,13 +16,13 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
       (_$_userComputed ??= Computed<UserModel>(() => super._user,
               name: 'ConversationStoreBase._user'))
           .value;
-  Computed<List<Message>>? _$messageComputed;
+  Computed<List<Message>>? _$listMessageComputed;
 
   @override
-  List<Message> get message =>
-      (_$messageComputed ??= Computed<List<Message>>(() => super.message,
-              name: 'ConversationStoreBase.message'))
-          .value;
+  List<Message> get listMessage => (_$listMessageComputed ??=
+          Computed<List<Message>>(() => super.listMessage,
+              name: 'ConversationStoreBase.listMessage'))
+      .value;
 
   late final _$controllerScrollAtom =
       Atom(name: 'ConversationStoreBase.controllerScroll', context: context);
@@ -40,19 +40,19 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
     });
   }
 
-  late final _$_messageAtom =
-      Atom(name: 'ConversationStoreBase._message', context: context);
+  late final _$_listMessageAtom =
+      Atom(name: 'ConversationStoreBase._listMessage', context: context);
 
   @override
-  ObservableList<Message> get _message {
-    _$_messageAtom.reportRead();
-    return super._message;
+  ObservableList<Message> get _listMessage {
+    _$_listMessageAtom.reportRead();
+    return super._listMessage;
   }
 
   @override
-  set _message(ObservableList<Message> value) {
-    _$_messageAtom.reportWrite(value, super._message, () {
-      super._message = value;
+  set _listMessage(ObservableList<Message> value) {
+    _$_listMessageAtom.reportWrite(value, super._listMessage, () {
+      super._listMessage = value;
     });
   }
 
@@ -60,22 +60,11 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
       ActionController(name: 'ConversationStoreBase', context: context);
 
   @override
-  void upScroll() {
+  void addAndOrderByMessage(Message message) {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
-        name: 'ConversationStoreBase.upScroll');
+        name: 'ConversationStoreBase.addAndOrderByMessage');
     try {
-      return super.upScroll();
-    } finally {
-      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void orderByMessage() {
-    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
-        name: 'ConversationStoreBase.orderByMessage');
-    try {
-      return super.orderByMessage();
+      return super.addAndOrderByMessage(message);
     } finally {
       _$ConversationStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -104,10 +93,21 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   }
 
   @override
+  void upScroll() {
+    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
+        name: 'ConversationStoreBase.upScroll');
+    try {
+      return super.upScroll();
+    } finally {
+      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 controllerScroll: ${controllerScroll},
-message: ${message}
+listMessage: ${listMessage}
     ''';
   }
 }
