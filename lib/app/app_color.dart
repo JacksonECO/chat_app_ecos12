@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColor {
-  static Color lightPeriwinkle = const Color(0xFFCCBEE3);
-  static Color greenTurquoise = const Color(0xFF126D58);
-  static Color cultured = const Color.fromARGB(255, 235, 222, 222); //Color(0xFFF6F6F6);
-  static Color azure = const Color(0xFF007AFF);
+  static const Color lightPeriwinkle = Color(0xFFCCBEE3);
+  static const Color greenTurquoise = Color(0xFF126D58);
+  static const Color cultured = Color.fromARGB(255, 235, 222, 222);
+  static const Color azure = Color(0xFF007AFF);
 }
