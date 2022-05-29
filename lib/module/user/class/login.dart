@@ -1,7 +1,7 @@
-import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/class/rest.dart';
-import 'package:ecos12_chat_app/components/message_user.dart';
-import 'package:ecos12_chat_app/screen/user/class/user_exception.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/module/user/class/user_exception.dart';
+import 'package:ecos12_chat_app/widgets/message_user.dart';
 import 'package:get_it/get_it.dart';
 
 abstract class Login {

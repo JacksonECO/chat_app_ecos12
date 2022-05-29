@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:ecos12_chat_app/app/app_exception.dart';
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
+import 'package:ecos12_chat_app/app/exception_app.dart';
 import 'package:http/http.dart' as http;
 
-class ExceptionRest extends AppException {}
+class ExceptionRest extends ExceptionApp {}
 
 abstract class Rest {
   static const Map<String, String> headerBase = {'Content-Type': 'application/json'};

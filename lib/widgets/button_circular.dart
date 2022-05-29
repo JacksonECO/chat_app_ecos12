@@ -1,4 +1,4 @@
-import 'package:ecos12_chat_app/app/app_color.dart';
+import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:flutter/material.dart';
 
 class ButtonCircular extends StatefulWidget {
@@ -47,7 +47,7 @@ class _ButtonCircularState extends State<ButtonCircular> with SingleTickerProvid
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.radius),
-            color: widget.colorButton ?? AppColor.greenTurquoise,
+            color: widget.colorButton ?? ColorApp.greenTurquoise,
           ),
           width: animation.value,
           height: widget.height,

@@ -1,7 +1,8 @@
-import 'package:ecos12_chat_app/screen/user/class/login.dart';
 import 'package:ecos12_chat_app/class/rest.dart';
-import 'package:ecos12_chat_app/components/message_user.dart';
-import 'package:ecos12_chat_app/screen/user/class/user_exception.dart';
+import 'package:ecos12_chat_app/module/user/class/login.dart';
+import 'package:ecos12_chat_app/module/user/class/user_exception.dart';
+import 'package:ecos12_chat_app/widgets/message_user.dart';
+import 'package:ecos12_chat_app/widgets/message_user_status.dart';
 
 abstract class Register {
   static Future<bool> call({

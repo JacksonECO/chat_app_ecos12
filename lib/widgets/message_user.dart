@@ -1,8 +1,6 @@
-import 'package:ecos12_chat_app/app/app_exception.dart';
-import 'package:ecos12_chat_app/components/message_user_status.dart';
+import 'package:ecos12_chat_app/app/exception_app.dart';
+import 'package:ecos12_chat_app/widgets/message_user_status.dart';
 import 'package:flutter/material.dart';
-
-export 'package:ecos12_chat_app/components/message_user_status.dart';
 
 abstract class MessageUser {
   static final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -30,9 +28,9 @@ abstract class MessageUser {
     Object object, {
     Duration time = const Duration(seconds: 4),
   }) {
-    String message = AppException.messageDefault;
+    String message = ExceptionApp.messageDefault;
 
-    if (object is AppException) {
+    if (object is ExceptionApp) {
       message = object.message;
     } else if (object is Exception) {
       message = object.toString();

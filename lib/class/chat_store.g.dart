@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chat.dart';
+part of 'chat_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -9,28 +9,27 @@ part of 'chat.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ChatStore on _ChatStoreBase, Store {
-  Computed<List<ConversationStore>>? _$listConversationComputed;
+  Computed<List<MessageStore>>? _$listMessageComputed;
 
   @override
-  List<ConversationStore> get listConversation =>
-      (_$listConversationComputed ??= Computed<List<ConversationStore>>(
-              () => super.listConversation,
-              name: '_ChatStoreBase.listConversation'))
-          .value;
+  List<MessageStore> get listMessage => (_$listMessageComputed ??=
+          Computed<List<MessageStore>>(() => super.listMessage,
+              name: '_ChatStoreBase.listMessage'))
+      .value;
 
-  late final _$_conversationAtom =
-      Atom(name: '_ChatStoreBase._conversation', context: context);
+  late final _$_messageStoreAtom =
+      Atom(name: '_ChatStoreBase._messageStore', context: context);
 
   @override
-  ObservableList<ConversationStore> get _conversation {
-    _$_conversationAtom.reportRead();
-    return super._conversation;
+  ObservableList<MessageStore> get _messageStore {
+    _$_messageStoreAtom.reportRead();
+    return super._messageStore;
   }
 
   @override
-  set _conversation(ObservableList<ConversationStore> value) {
-    _$_conversationAtom.reportWrite(value, super._conversation, () {
-      super._conversation = value;
+  set _messageStore(ObservableList<MessageStore> value) {
+    _$_messageStoreAtom.reportWrite(value, super._messageStore, () {
+      super._messageStore = value;
     });
   }
 
@@ -70,18 +69,18 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       ActionController(name: '_ChatStoreBase', context: context);
 
   @override
-  ConversationStore? getConversation(String idConversation) {
+  MessageStore? getMessage(String idConversation) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
-        name: '_ChatStoreBase.getConversation');
+        name: '_ChatStoreBase.getMessage');
     try {
-      return super.getConversation(idConversation);
+      return super.getMessage(idConversation);
     } finally {
       _$_ChatStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void sendMessage(Message data) {
+  void sendMessage(MessageModel data) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
         name: '_ChatStoreBase.sendMessage');
     try {
@@ -94,7 +93,7 @@ mixin _$ChatStore on _ChatStoreBase, Store {
   @override
   String toString() {
     return '''
-listConversation: ${listConversation}
+listMessage: ${listMessage}
     ''';
   }
 }

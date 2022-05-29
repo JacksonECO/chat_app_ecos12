@@ -1,9 +1,9 @@
-import 'package:ecos12_chat_app/components/box.dart';
-import 'package:ecos12_chat_app/components/button_circular.dart';
-import 'package:ecos12_chat_app/screen/chat/conversation.dart';
-import 'package:ecos12_chat_app/screen/user/class/register.dart';
-import 'package:ecos12_chat_app/screen/user/components/design_register_top.dart';
-import 'package:ecos12_chat_app/screen/user/components/input_login.dart';
+import 'package:ecos12_chat_app/module/message/message_screen.dart';
+import 'package:ecos12_chat_app/module/user/class/register.dart';
+import 'package:ecos12_chat_app/module/user/widgets/design_register_top.dart';
+import 'package:ecos12_chat_app/module/user/widgets/input_login.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
+import 'package:ecos12_chat_app/widgets/button_circular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   if (success) {
                     Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen('first')),
+                      MaterialPageRoute<void>(builder: (BuildContext context) => const MessageScreen('first')),
                       // (route) => false,
                     );
                   }

@@ -1,12 +1,12 @@
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/date.dart';
-import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
-import 'package:ecos12_chat_app/components/message_user.dart';
-import 'package:ecos12_chat_app/mobx/chat.dart';
+import 'package:ecos12_chat_app/class/chat_store.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/module/user/login_screen.dart';
+import 'package:ecos12_chat_app/widgets/message_user.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ecos12_chat_app/screen/user/login.dart';
 import 'package:get_it/get_it.dart';
 
 void main() {

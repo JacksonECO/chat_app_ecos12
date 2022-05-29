@@ -1,11 +1,10 @@
 import 'package:ecos12_chat_app/class/date.dart';
-import 'package:ecos12_chat_app/components/box.dart';
+import 'package:ecos12_chat_app/class/model/message_model.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ecos12_chat_app/class/model/message.dart';
-
 class MessageTile extends StatelessWidget {
-  final Message message;
+  final MessageModel message;
   const MessageTile({
     Key? key,
     required this.message,

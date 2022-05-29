@@ -1,30 +1,31 @@
-import 'package:ecos12_chat_app/class/model/message.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
-import 'package:ecos12_chat_app/mobx/conversation.dart';
+import 'package:ecos12_chat_app/class/model/message_model.dart';
+import 'package:ecos12_chat_app/module/message/message_store.dart';
 import 'package:mobx/mobx.dart';
-part 'chat.g.dart';
+part 'chat_store.g.dart';
 
 class ChatStore = _ChatStoreBase with _$ChatStore;
 
 abstract class _ChatStoreBase with Store {
   _ChatStoreBase(this.typeWebSocketChat) {
-    _conversation.add(ConversationStore('first', true));
+    _messageStore.add(MessageStore('first', true));
   }
 
   late WebSocketChat typeWebSocketChat;
 
   @observable
-  ObservableList<ConversationStore> _conversation = <ConversationStore>[].asObservable();
+  ObservableList<MessageStore> _messageStore = <MessageStore>[].asObservable();
   @computed
-  List<ConversationStore> get listConversation => _conversation.toList();
+  List<MessageStore> get listMessage => _messageStore.toList();
   @computed
-  set conversation(List<ConversationStore> conversation) {
-    _conversation = conversation.asObservable();
+  set messageStore(List<MessageStore> messageStore) {
+    _messageStore = messageStore.asObservable();
   }
 
   @action
-  ConversationStore? getConversation(String idConversation) {
-    return listConversation.firstWhere((element) => element.id == idConversation, orElse: null);
+  MessageStore? getMessage(String idConversation) {
+    // ignore: null_closures
+    return listMessage.firstWhere((element) => element.id == idConversation, orElse: null);
   }
 
   @observable
@@ -38,12 +39,12 @@ abstract class _ChatStoreBase with Store {
     await _socketChat!.connect();
 
     _socketChat!.listen((message) async {
-      _conversation.first.addMessage(Message.fromMap(message));
+      _messageStore.first.addMessage(MessageModel.fromMap(message));
     });
   }
 
   @action
-  void sendMessage(Message data) {
+  void sendMessage(MessageModel data) {
     if (_socketChat == null) print('Sem Conexão');
     _socketChat!.send(data.sendToMap());
   }

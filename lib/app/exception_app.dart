@@ -1,7 +1,7 @@
-abstract class AppException implements Exception {
+abstract class ExceptionApp implements Exception {
   static const String messageDefault = 'Tente novamente mais tarde!';
   final String message;
-  AppException([this.message = messageDefault]);
+  ExceptionApp([this.message = messageDefault]);
 
   @override
   String toString() => '$runtimeType(message: $message)';

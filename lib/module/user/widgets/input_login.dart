@@ -1,7 +1,6 @@
+import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:ecos12_chat_app/app/app_color.dart';
 
 class InputTextLogin extends StatelessWidget {
   // Obrigatórios
@@ -49,7 +48,7 @@ class InputTextLogin extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: const TextStyle(color: AppColor.greenTurquoise),
+              style: const TextStyle(color: ColorApp.greenTurquoise),
             ),
           ),
           TextFormField(
@@ -63,7 +62,7 @@ class InputTextLogin extends StatelessWidget {
               hintText: hintText,
               prefixIcon: Icon(
                 iconData,
-                color: AppColor.lightPeriwinkle,
+                color: ColorApp.lightPeriwinkle,
               ),
               focusColor: Colors.red,
             ),

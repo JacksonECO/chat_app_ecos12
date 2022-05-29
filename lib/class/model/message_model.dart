@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class Message {
+class MessageModel {
   String? id;
   String text;
   String nameFrom;
@@ -9,7 +9,7 @@ class Message {
   bool isSender;
   DateTime? timestampSend;
 
-  Message({
+  MessageModel({
     this.id,
     required this.text,
     required this.nameFrom,
@@ -19,7 +19,7 @@ class Message {
     this.timestampSend,
   });
 
-  Message copyWith({
+  MessageModel copyWith({
     String? id,
     String? text,
     String? nameFrom,
@@ -28,7 +28,7 @@ class Message {
     bool? isSender,
     DateTime? timestampSend,
   }) {
-    return Message(
+    return MessageModel(
       id: id ?? this.id,
       text: text ?? this.text,
       nameFrom: nameFrom ?? this.nameFrom,
@@ -59,8 +59,8 @@ class Message {
     };
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
-    return Message(
+  factory MessageModel.fromMap(Map<String, dynamic> map) {
+    return MessageModel(
       id: map['id'],
       text: map['text'] ?? '',
       nameFrom: map['nameFrom'] ?? '',
@@ -73,7 +73,7 @@ class Message {
 
   String toJson() => json.encode(toMap());
 
-  factory Message.fromJson(String source) => Message.fromMap(json.decode(source));
+  factory MessageModel.fromJson(String source) => MessageModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -83,25 +83,25 @@ class Message {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
-    return other is Message &&
-      other.id == id &&
-      other.text == text &&
-      other.nameFrom == nameFrom &&
-      other.idFrom == idFrom &&
-      other.timestamp == timestamp &&
-      other.isSender == isSender &&
-      other.timestampSend == timestampSend;
+
+    return other is MessageModel &&
+        other.id == id &&
+        other.text == text &&
+        other.nameFrom == nameFrom &&
+        other.idFrom == idFrom &&
+        other.timestamp == timestamp &&
+        other.isSender == isSender &&
+        other.timestampSend == timestampSend;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      text.hashCode ^
-      nameFrom.hashCode ^
-      idFrom.hashCode ^
-      timestamp.hashCode ^
-      isSender.hashCode ^
-      timestampSend.hashCode;
+        text.hashCode ^
+        nameFrom.hashCode ^
+        idFrom.hashCode ^
+        timestamp.hashCode ^
+        isSender.hashCode ^
+        timestampSend.hashCode;
   }
 }

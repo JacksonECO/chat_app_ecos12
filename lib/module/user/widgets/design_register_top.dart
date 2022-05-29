@@ -1,5 +1,5 @@
-import 'package:ecos12_chat_app/app/app_color.dart';
-import 'package:ecos12_chat_app/screen/user/login.dart';
+import 'package:ecos12_chat_app/app/color_app.dart';
+import 'package:ecos12_chat_app/module/user/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class DesignRegisterTop extends StatelessWidget {
@@ -16,7 +16,7 @@ class DesignRegisterTop extends StatelessWidget {
           margin: EdgeInsets.zero,
           height: 100,
           decoration: const BoxDecoration(
-            color: AppColor.greenTurquoise,
+            color: ColorApp.greenTurquoise,
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
           ),
           child: Row(
@@ -25,7 +25,7 @@ class DesignRegisterTop extends StatelessWidget {
               const SizedBox(width: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: AppColor.azure,
+                  color: ColorApp.azure,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: InkWell(
@@ -60,7 +60,7 @@ class DesignRegisterTop extends StatelessWidget {
         Container(
           margin: EdgeInsets.zero,
           padding: EdgeInsets.zero,
-          color: AppColor.greenTurquoise,
+          color: ColorApp.greenTurquoise,
           child: Container(
             margin: EdgeInsets.zero,
             padding: EdgeInsets.zero,

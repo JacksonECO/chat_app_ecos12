@@ -1,15 +1,15 @@
-import 'package:ecos12_chat_app/app/app_color.dart';
+import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
-import 'package:ecos12_chat_app/components/box.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class AppBarChat extends AppBar {
-  AppBarChat({Key? key})
+class AppBarMessage extends AppBar {
+  AppBarMessage({Key? key})
       : super(
           key: key,
-          backgroundColor: AppColor.cultured,
-          foregroundColor: AppColor.azure,
+          backgroundColor: ColorApp.cultured,
+          foregroundColor: ColorApp.azure,
           actions: [],
           toolbarHeight: 65,
           elevation: 15,

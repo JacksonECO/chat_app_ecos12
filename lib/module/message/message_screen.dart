@@ -1,33 +1,33 @@
-import 'package:ecos12_chat_app/mobx/conversation.dart';
+import 'package:ecos12_chat_app/module/message/message_store.dart';
+import 'package:ecos12_chat_app/module/message/widgets/app_bar_message.dart';
+import 'package:ecos12_chat_app/module/message/widgets/input_text_message.dart';
+import 'package:ecos12_chat_app/module/message/widgets/message_tile.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import 'package:ecos12_chat_app/components/box.dart';
-import 'package:ecos12_chat_app/mobx/chat.dart';
-import 'package:ecos12_chat_app/screen/chat/components/app_bar_chat.dart';
-import 'package:ecos12_chat_app/screen/chat/components/input_text_message.dart';
-import 'package:ecos12_chat_app/screen/chat/components/message_tile.dart';
+import 'package:ecos12_chat_app/class/chat_store.dart';
 
-class ConversationScreen extends StatefulWidget {
+class MessageScreen extends StatefulWidget {
   final String idConversation;
-  const ConversationScreen(
+  const MessageScreen(
     this.idConversation, {
     Key? key,
   }) : super(key: key);
 
   @override
-  State<ConversationScreen> createState() => _ConversationScreenState();
+  State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _ConversationScreenState extends State<ConversationScreen> {
+class _MessageScreenState extends State<MessageScreen> {
   ChatStore store = GetIt.instance.get<ChatStore>();
-  late final ConversationStore conversation;
+  late final MessageStore messageStore;
 
   @override
   void initState() {
     store.startWebSocket();
-    conversation = store.getConversation(widget.idConversation)!;
+    messageStore = store.getMessage(widget.idConversation)!;
     super.initState();
   }
 
@@ -40,7 +40,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarChat(),
+      appBar: AppBarMessage(),
       body: Stack(
         children: [
           SizedBox(
@@ -61,18 +61,16 @@ class _ConversationScreenState extends State<ConversationScreen> {
                     behavior: const ScrollBehavior(),
                     child: ListView.builder(
                       reverse: true,
-                      controller: conversation.controllerScroll,
-                      semanticChildCount: conversation.listMessage.length,
+                      controller: messageStore.controllerScroll,
+                      semanticChildCount: messageStore.listMessage.length,
                       shrinkWrap: true,
-                      itemCount: conversation.listMessage.length,
-                      itemBuilder: (context, index) => MessageTile(message: conversation.listMessage[index]),
+                      itemCount: messageStore.listMessage.length,
+                      itemBuilder: (context, index) => MessageTile(message: messageStore.listMessage[index]),
                     ),
                   ),
                 );
               }),
-              InputTextMessage(
-                conversationStore: conversation,
-              ),
+              InputTextMessage(messageStore: messageStore),
             ],
           ),
         ],

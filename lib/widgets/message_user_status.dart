@@ -1,4 +1,4 @@
-import 'package:ecos12_chat_app/app/app_color.dart';
+import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:flutter/material.dart';
 
 enum StatusMessageUser {
@@ -26,7 +26,7 @@ extension MessageUserStatusExtension on StatusMessageUser {
       case StatusMessageUser.error:
         return Colors.red;
       case StatusMessageUser.success:
-        return AppColor.greenTurquoise;
+        return ColorApp.greenTurquoise;
     }
   }
 

@@ -1,10 +1,10 @@
-import 'package:ecos12_chat_app/app/app_color.dart';
-import 'package:ecos12_chat_app/screen/user/class/login.dart';
-import 'package:ecos12_chat_app/components/box.dart';
-import 'package:ecos12_chat_app/components/button_circular.dart';
-import 'package:ecos12_chat_app/screen/user/components/input_login.dart';
-import 'package:ecos12_chat_app/screen/chat/conversation.dart';
-import 'package:ecos12_chat_app/screen/user/register_screen.dart';
+import 'package:ecos12_chat_app/app/color_app.dart';
+import 'package:ecos12_chat_app/module/message/message_screen.dart';
+import 'package:ecos12_chat_app/module/user/class/login.dart';
+import 'package:ecos12_chat_app/module/user/register_screen.dart';
+import 'package:ecos12_chat_app/module/user/widgets/input_login.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
+import 'package:ecos12_chat_app/widgets/button_circular.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Box(20),
             ButtonCircular(
-              colorButton: AppColor.greenTurquoise,
+              colorButton: ColorApp.greenTurquoise,
               text: 'Entrar',
               onTap: () async {
                 final success = await Login.signIn(
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 if (success) {
                   Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (BuildContext context) => const ConversationScreen('first')),
+                    MaterialPageRoute<void>(builder: (BuildContext context) => const MessageScreen('first')),
                   );
                 }
               },
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text(
                 'Inscreva-se',
                 style: TextStyle(
-                  color: AppColor.azure,
+                  color: ColorApp.azure,
                   decoration: TextDecoration.underline,
                   fontSize: 16,
                 ),

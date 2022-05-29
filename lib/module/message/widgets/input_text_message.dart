@@ -1,15 +1,14 @@
+import 'package:ecos12_chat_app/app/color_app.dart';
+import 'package:ecos12_chat_app/module/message/message_store.dart';
+import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 
-import 'package:ecos12_chat_app/app/app_color.dart';
-import 'package:ecos12_chat_app/components/box.dart';
-import 'package:ecos12_chat_app/mobx/conversation.dart';
-
 class InputTextMessage extends StatefulWidget {
-  final ConversationStore conversationStore;
+  final MessageStore messageStore;
 
   const InputTextMessage({
     Key? key,
-    required this.conversationStore,
+    required this.messageStore,
   }) : super(key: key);
 
   @override
@@ -31,7 +30,7 @@ class _InputTextMessageState extends State<InputTextMessage> {
       margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: AppColor.cultured,
+        color: ColorApp.cultured,
       ),
       child: Row(
         children: [
@@ -55,7 +54,7 @@ class _InputTextMessageState extends State<InputTextMessage> {
           Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10000), color: AppColor.greenTurquoise),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10000), color: ColorApp.greenTurquoise),
             child: InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
@@ -64,7 +63,7 @@ class _InputTextMessageState extends State<InputTextMessage> {
                 color: Colors.white,
               ),
               onTap: () {
-                widget.conversationStore.sendOnTap(controller);
+                widget.messageStore.sendOnTap(controller);
               },
             ),
           ),
