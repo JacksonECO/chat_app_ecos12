@@ -1,5 +1,5 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
-import 'package:ecos12_chat_app/module/message/message_screen.dart';
+import 'package:ecos12_chat_app/module/home/home_screen.dart';
 import 'package:ecos12_chat_app/module/user/class/login.dart';
 import 'package:ecos12_chat_app/module/user/register_screen.dart';
 import 'package:ecos12_chat_app/module/user/widgets/input_login.dart';
@@ -65,8 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
 
                 if (success) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (BuildContext context) => const MessageScreen('first')),
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute<void>(builder: (BuildContext context) => const HomeScreen()),
+                    (Route<dynamic> route) => false,
                   );
                 }
               },

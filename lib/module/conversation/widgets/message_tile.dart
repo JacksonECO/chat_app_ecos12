@@ -38,7 +38,7 @@ class MessageTile extends StatelessWidget {
                       strokeWidth: 1,
                     ))
                 : Text(
-                    Date.hoursWithSeconds(message.timestamp!),
+                    Date.hoursWithMinute(message.timestamp!),
                     style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
                   ),
           ],

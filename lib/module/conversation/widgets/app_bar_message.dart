@@ -1,15 +1,14 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
-import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
-class AppBarMessage extends AppBar {
-  AppBarMessage({Key? key})
+class AppBarConversation extends AppBar {
+  final String textTitle;
+  AppBarConversation({Key? key, required this.textTitle})
       : super(
           key: key,
-          backgroundColor: ColorApp.cultured,
-          foregroundColor: ColorApp.azure,
+          backgroundColor: ColorApp.greenTurquoise,
+          foregroundColor: Colors.white,
           actions: [],
           toolbarHeight: 65,
           elevation: 15,
@@ -34,8 +33,8 @@ class AppBarMessage extends AppBar {
               ),
               Box(10),
               Text(
-                GetIt.instance.get<UserModel>().nickname ?? 'Martha Craig',
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                textTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ],
           ),

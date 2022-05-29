@@ -1,10 +1,10 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
-import 'package:ecos12_chat_app/module/message/message_store.dart';
+import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 
 class InputTextMessage extends StatefulWidget {
-  final MessageStore messageStore;
+  final ConversationStore messageStore;
 
   const InputTextMessage({
     Key? key,

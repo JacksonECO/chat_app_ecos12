@@ -1,4 +1,4 @@
-import 'package:ecos12_chat_app/module/message/message_screen.dart';
+import 'package:ecos12_chat_app/module/home/home_screen.dart';
 import 'package:ecos12_chat_app/module/user/class/register.dart';
 import 'package:ecos12_chat_app/module/user/widgets/design_register_top.dart';
 import 'package:ecos12_chat_app/module/user/widgets/input_login.dart';
@@ -83,9 +83,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   );
 
                   if (success) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute<void>(builder: (BuildContext context) => const MessageScreen('first')),
-                      // (route) => false,
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute<void>(builder: (BuildContext context) => const HomeScreen()),
+                      (Route<dynamic> route) => false,
                     );
                   }
                 },

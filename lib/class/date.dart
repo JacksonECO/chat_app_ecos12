@@ -3,7 +3,7 @@ import 'package:ecos12_chat_app/class/rest.dart';
 abstract class Date {
   static Duration errorTime = const Duration();
 
-  static String hoursWithSeconds(DateTime date) {
+  static String hoursWithMinute(DateTime date) {
     var _date = dateLocate(date);
     return _zero(_date.hour) + ':' + _zero(_date.minute);
   }

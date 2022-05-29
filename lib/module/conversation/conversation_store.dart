@@ -4,15 +4,16 @@ import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
-part 'message_store.g.dart';
+part 'conversation_store.g.dart';
 
-class MessageStore = MessageStoreBase with _$MessageStore;
+class ConversationStore = ConversationStoreBase with _$ConversationStore;
 
-abstract class MessageStoreBase with Store {
-  late final String id;
-  late final bool isGroup;
+abstract class ConversationStoreBase with Store {
+  final String id;
+  final String title;
+  final bool isGroup;
 
-  MessageStoreBase(this.id, this.isGroup);
+  ConversationStoreBase(this.id, this.title, this.isGroup);
 
   @observable
   ScrollController controllerScroll = ScrollController();
@@ -27,6 +28,11 @@ abstract class MessageStoreBase with Store {
   @computed
   set listMessage(List<MessageModel> messageStore) {
     _listMessage = messageStore.asObservable();
+  }
+
+  @computed
+  MessageModel? get lastMessage {
+    return listMessage.isNotEmpty ? listMessage.first : null;
   }
 
   @action

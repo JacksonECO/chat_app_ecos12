@@ -9,11 +9,11 @@ part of 'chat_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ChatStore on _ChatStoreBase, Store {
-  Computed<List<MessageStore>>? _$listMessageComputed;
+  Computed<List<ConversationStore>>? _$listMessageComputed;
 
   @override
-  List<MessageStore> get listMessage => (_$listMessageComputed ??=
-          Computed<List<MessageStore>>(() => super.listMessage,
+  List<ConversationStore> get listMessage => (_$listMessageComputed ??=
+          Computed<List<ConversationStore>>(() => super.listMessage,
               name: '_ChatStoreBase.listMessage'))
       .value;
 
@@ -21,13 +21,13 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       Atom(name: '_ChatStoreBase._messageStore', context: context);
 
   @override
-  ObservableList<MessageStore> get _messageStore {
+  ObservableList<ConversationStore> get _messageStore {
     _$_messageStoreAtom.reportRead();
     return super._messageStore;
   }
 
   @override
-  set _messageStore(ObservableList<MessageStore> value) {
+  set _messageStore(ObservableList<ConversationStore> value) {
     _$_messageStoreAtom.reportWrite(value, super._messageStore, () {
       super._messageStore = value;
     });
@@ -69,7 +69,7 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       ActionController(name: '_ChatStoreBase', context: context);
 
   @override
-  MessageStore? getMessage(String idConversation) {
+  ConversationStore? getMessage(String idConversation) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
         name: '_ChatStoreBase.getMessage');
     try {

@@ -1,7 +1,7 @@
-import 'package:ecos12_chat_app/module/message/message_store.dart';
-import 'package:ecos12_chat_app/module/message/widgets/app_bar_message.dart';
-import 'package:ecos12_chat_app/module/message/widgets/input_text_message.dart';
-import 'package:ecos12_chat_app/module/message/widgets/message_tile.dart';
+import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
+import 'package:ecos12_chat_app/module/conversation/widgets/app_bar_message.dart';
+import 'package:ecos12_chat_app/module/conversation/widgets/input_text_message.dart';
+import 'package:ecos12_chat_app/module/conversation/widgets/message_tile.dart';
 import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,38 +9,32 @@ import 'package:get_it/get_it.dart';
 
 import 'package:ecos12_chat_app/class/chat_store.dart';
 
-class MessageScreen extends StatefulWidget {
+class ConversationScreen extends StatefulWidget {
   final String idConversation;
-  const MessageScreen(
+  const ConversationScreen(
     this.idConversation, {
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MessageScreen> createState() => _MessageScreenState();
+  State<ConversationScreen> createState() => _ConversationScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> {
-  ChatStore store = GetIt.instance.get<ChatStore>();
-  late final MessageStore messageStore;
+class _ConversationScreenState extends State<ConversationScreen> {
+  late final ConversationStore messageStore;
 
   @override
   void initState() {
-    store.startWebSocket();
-    messageStore = store.getMessage(widget.idConversation)!;
+    messageStore = GetIt.instance.get<ChatStore>().getMessage(widget.idConversation)!;
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    store.closeConnection();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarMessage(),
+      appBar: AppBarConversation(
+        textTitle: messageStore.title,
+      ),
       body: Stack(
         children: [
           SizedBox(
