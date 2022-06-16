@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class AppBarConversation extends AppBar {
   final String textTitle;
-  AppBarConversation({Key? key, required this.textTitle})
+  final String conversationID;
+  AppBarConversation({Key? key, required this.textTitle, required this.conversationID})
       : super(
           key: key,
           backgroundColor: ColorApp.greenTurquoise,
@@ -27,7 +28,7 @@ class AppBarConversation extends AppBar {
               CircleAvatar(
                 radius: 25,
                 backgroundImage: Image.network(
-                  'https://picsum.photos/1200/1200',
+                  'https://picsum.photos/200/300?random=$conversationID',
                   fit: BoxFit.fill,
                 ).image,
               ),

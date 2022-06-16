@@ -1,56 +1,63 @@
 import 'dart:convert';
 
 class UserModel {
-  String? id;
-  String? registry;
-  String? nickname;
+  late String registry;
+  late String nickname;
+  late String token;
 
   bool get isValid {
-    return id != null &&
-        id!.isNotEmpty &&
-        registry != null &&
-        registry!.isNotEmpty &&
-        nickname != null &&
-        nickname!.isNotEmpty;
+    return true;
+    // return id != null &&
+    //     id!.isNotEmpty &&
+    //     registry != null &&
+    //     registry!.isNotEmpty &&
+    //     nickname != null &&
+    //     nickname!.isNotEmpty;
   }
 
   void update(UserModel newUser) {
-    id = newUser.id;
     registry = newUser.registry;
     nickname = newUser.nickname;
+    token = newUser.token;
+  }
+
+  UserModel.init(){
+    registry = '';
+    nickname = '';
+    token = '';
   }
 
   UserModel({
-    this.id,
-    this.registry,
-    this.nickname,
+    required this.registry,
+    required this.nickname,
+    required this.token,
   });
 
   UserModel copyWith({
-    String? id,
     String? registry,
     String? nickname,
+    String? token,
   }) {
     return UserModel(
-      id: id ?? this.id,
       registry: registry ?? this.registry,
       nickname: nickname ?? this.nickname,
+      token: token ?? this.token,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'registry': registry,
       'nickname': nickname,
+      'token': token,
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'].toString(),
-      registry: map['registry'].toString(),
-      nickname: map['nickname'],
+      registry: map['registry'] ?? '',
+      nickname: map['nickname'] ?? '',
+      token: map['token'] ?? '',
     );
   }
 
@@ -59,15 +66,18 @@ class UserModel {
   factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'UserModel(id: $id, registry: $registry, nickname: $nickname)';
+  String toString() => 'UserModel(registry: $registry, nickname: $nickname, token: $token)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
-    return other is UserModel && other.id == id && other.registry == registry && other.nickname == nickname;
+  
+    return other is UserModel &&
+      other.registry == registry &&
+      other.nickname == nickname &&
+      other.token == token;
   }
 
   @override
-  int get hashCode => id.hashCode ^ registry.hashCode ^ nickname.hashCode;
+  int get hashCode => registry.hashCode ^ nickname.hashCode ^ token.hashCode;
 }

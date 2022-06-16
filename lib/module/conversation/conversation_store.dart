@@ -38,21 +38,22 @@ abstract class ConversationStoreBase with Store {
   @action
   void addAndOrderByMessage(MessageModel message) {
     var temp = listMessage;
-    listMessage.add(message);
-    listMessage.sort(((a, b) {
-      if (a.timestamp == null && b.timestamp == null) {
-        if (a.timestampSend!.isBefore(b.timestampSend!)) return 1;
-        if (a.timestampSend!.isAfter(b.timestampSend!)) return -1;
-        return 0;
-      }
+    // listMessage.add(message);
+    listMessage.insert(0, message);
+    // listMessage.sort(((a, b) {
+    //   if (a.timestamp == null && b.timestamp == null) {
+    //     if (a.timestampSend!.isBefore(b.timestampSend!)) return 1;
+    //     if (a.timestampSend!.isAfter(b.timestampSend!)) return -1;
+    //     return 0;
+    //   }
 
-      if (a.timestamp == null) return -1;
-      if (b.timestamp == null) return 1;
+    //   if (a.timestamp == null) return -1;
+    //   if (b.timestamp == null) return 1;
 
-      if (a.timestamp!.isBefore(b.timestamp!)) return 1;
-      if (a.timestamp!.isAfter(b.timestamp!)) return -1;
-      return 0;
-    }));
+    //   if (a.timestamp!.isBefore(b.timestamp!)) return 1;
+    //   if (a.timestamp!.isAfter(b.timestamp!)) return -1;
+    //   return 0;
+    // }));
     listMessage = temp;
   }
 
@@ -62,9 +63,10 @@ abstract class ConversationStoreBase with Store {
     var newMessage = MessageModel(
       text: _controller.text,
       isSender: true,
-      idFrom: _user.id!,
-      nameFrom: _user.nickname!,
+      senderRegistry: _user.registry,
+      nameFrom: _user.nickname,
       timestampSend: DateTime.now(),
+      conversationId: id,
     );
 
     // Limpa o campo de texto
@@ -76,12 +78,12 @@ abstract class ConversationStoreBase with Store {
 
   @action
   void addMessage(MessageModel newMessage) {
-    newMessage.isSender = _user.id == newMessage.idFrom;
+    newMessage.isSender = _user.registry == newMessage.senderRegistry;
 
     /// Para quando é recebido a confirmação de envio da mensagem
     if (newMessage.isSender == true && newMessage.timestamp != null) {
       for (var i = 0; i < listMessage.length; i++) {
-        if (listMessage[i].text == newMessage.text && listMessage[i].idFrom == newMessage.idFrom) {
+        if (listMessage[i].text == newMessage.text && listMessage[i].senderRegistry == newMessage.senderRegistry) {
           _listMessage.remove(listMessage[i]);
           break;
         }
@@ -91,6 +93,13 @@ abstract class ConversationStoreBase with Store {
     print(newMessage);
     addAndOrderByMessage(newMessage);
     upScroll();
+  }
+
+  @action
+  void history(MessageModel newMessage) {
+    newMessage.isSender = _user.registry == newMessage.senderRegistry;
+
+    addAndOrderByMessage(newMessage);
   }
 
   @action

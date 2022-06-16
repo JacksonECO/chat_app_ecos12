@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
@@ -18,12 +20,13 @@ void main() {
 
 Future<void> start(WebSocketChat webSocketChat) async {
   DotEnvApp.init();
-  await Date.init();
+  Date.init();
 
   ChatStore chat = ChatStore(webSocketChat);
 
   GetIt.I.registerSingleton<ChatStore>(chat);
-  GetIt.I.registerSingleton<UserModel>(UserModel());
+  GetIt.I.registerSingleton<UserModel>(UserModel.init());
+
   runApp(const MyApp());
 }
 

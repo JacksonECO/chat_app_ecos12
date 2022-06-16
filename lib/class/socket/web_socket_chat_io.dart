@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
@@ -27,14 +28,9 @@ class WebSocketChatIO implements WebSocketChat {
       await close();
     }
 
-    _socket = await WebSocket.connect(url ?? ('wss://' + DotEnvApp.urlBase)).timeout(const Duration(seconds: 5));
+    _socket = await WebSocket.connect(url ?? ('wss://' + DotEnvApp.urlBase));
 
     _socket!.pingInterval = WebSocketChat.pingInterval;
-
-    // send({
-    //   'type': 'Start',
-    //   'id': 'io',
-    // });
   }
 
   @override
@@ -42,7 +38,12 @@ class WebSocketChatIO implements WebSocketChat {
     if (_socket == null) throw 'Connect is close';
 
     _socket!.listen(
-      (input) => onData(json.decode(input)),
+      (input) {
+        if (input is String) {
+          log(input, name: 'Server');
+          onData(json.decode(input));
+        }
+      },
       onDone: () {
         _socket = null;
         print('Connect closed');
@@ -56,6 +57,7 @@ class WebSocketChatIO implements WebSocketChat {
   @override
   void send(Map<String, dynamic> data) {
     if (_socket == null) throw 'Connect is close';
+    log(json.encode(data), name: 'Client');
     _socket!.add(json.encode(data));
   }
 

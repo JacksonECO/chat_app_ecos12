@@ -9,10 +9,11 @@ class ExceptionRest extends ExceptionApp {}
 abstract class Rest {
   static const Map<String, String> headerBase = {'Content-Type': 'application/json'};
   static const Duration timeoutBase = Duration(seconds: 5);
+  static const String pathBase = '/api/v1';
 
   static Future<Map<String, dynamic>> get({
     String? url,
-    String rota = '',
+    String path = '',
     Map<String, String> headers = const {},
     Duration timeout = timeoutBase,
     void Function(http.Response response)? handleException,
@@ -20,7 +21,7 @@ abstract class Rest {
     url ??= DotEnvApp.urlBase;
 
     var response = await http.get(
-      Uri.https(url, rota),
+      Uri.https(url, pathBase + path),
       headers: {...headerBase, ...headers},
     ).timeout(timeout);
 
@@ -28,17 +29,18 @@ abstract class Rest {
       return json.decode(response.body);
     }
 
+    print(response.statusCode);
     if (handleException != null) {
       handleException(response);
     }
-    print(response.statusCode);
+
     print(response.body);
     throw ExceptionRest();
   }
 
   static Future<Map<String, dynamic>> post({
     String? url,
-    String rota = '',
+    String path = '',
     Map<String, String> headers = const {},
     Map body = const {},
     Duration timeout = timeoutBase,
@@ -47,7 +49,7 @@ abstract class Rest {
     url ??= DotEnvApp.urlBase;
 
     var response = await http.post(
-      Uri.https(url, rota),
+      Uri.https(url, pathBase + path),
       body: json.encode(body),
       headers: {...headerBase, ...headers},
     ).timeout(timeout);
@@ -56,11 +58,12 @@ abstract class Rest {
       return json.decode(response.body);
     }
 
+    print(response.statusCode);
+    print(response.body);
     if (handleException != null) {
       handleException(response);
     }
-    print(response.statusCode);
-    print(response.body);
+    
     throw ExceptionRest();
   }
 }

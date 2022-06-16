@@ -100,6 +100,17 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   }
 
   @override
+  void history(MessageModel newMessage) {
+    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
+        name: 'ConversationStoreBase.history');
+    try {
+      return super.history(newMessage);
+    } finally {
+      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void upScroll() {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
         name: 'ConversationStoreBase.upScroll');

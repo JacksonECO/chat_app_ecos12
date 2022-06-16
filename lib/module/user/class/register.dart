@@ -19,7 +19,7 @@ abstract class Register {
       }
 
       final response = await Rest.post(
-        rota: '/users',
+        path: '/users',
         body: {
           'nickname': name,
           'registry': registry,
@@ -53,14 +53,14 @@ abstract class Register {
     if (registry == '') {
       return 'Digite sua matrícula';
     }
-    if (registry.length < 5 || registry.length > 9) {
+    if (registry.length < 5 || registry.length > 10) {
       return 'Matrícula inválida!';
     }
 
     if (password == '') {
       return 'Digite sua senha';
     }
-    if (password.length < 5) {
+    if (password.length < 3) {
       return 'Senha insuficiente';
     }
     if (password != passwordConfirm) {

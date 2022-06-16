@@ -1,6 +1,7 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:ecos12_chat_app/class/chat_store.dart';
 import 'package:ecos12_chat_app/class/date.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/module/home/widgets/app_bar_home.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_screen.dart';
 import 'package:ecos12_chat_app/widgets/button_simple.dart';
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         : store.listMessage[index].toString()),
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(
-                        'https://picsum.photos/200/300?random=$index',
+                        'https://picsum.photos/id/$index/200/300.jpg'
                       ),
                     ),
                     title: Text(store.listMessage[index].title, style: const TextStyle(fontWeight: FontWeight.w500)),

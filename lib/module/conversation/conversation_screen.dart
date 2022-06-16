@@ -34,6 +34,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     return Scaffold(
       appBar: AppBarConversation(
         textTitle: messageStore.title,
+        conversationID: messageStore.id,
       ),
       body: Stack(
         children: [

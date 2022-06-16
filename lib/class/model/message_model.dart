@@ -1,11 +1,16 @@
 import 'dart:convert';
 
+import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:get_it/get_it.dart';
+
 class MessageModel {
   String? id;
   String text;
-  String nameFrom;
-  String idFrom;
+  String? nameFrom;
+  String conversationId;
+  String senderRegistry;
   DateTime? timestamp;
+
   bool isSender;
   DateTime? timestampSend;
 
@@ -13,7 +18,8 @@ class MessageModel {
     this.id,
     required this.text,
     required this.nameFrom,
-    required this.idFrom,
+    required this.conversationId,
+    required this.senderRegistry,
     this.timestamp,
     required this.isSender,
     this.timestampSend,
@@ -23,7 +29,8 @@ class MessageModel {
     String? id,
     String? text,
     String? nameFrom,
-    String? idFrom,
+    String? conversationId,
+    String? senderRegistry,
     DateTime? timestamp,
     bool? isSender,
     DateTime? timestampSend,
@@ -32,7 +39,8 @@ class MessageModel {
       id: id ?? this.id,
       text: text ?? this.text,
       nameFrom: nameFrom ?? this.nameFrom,
-      idFrom: idFrom ?? this.idFrom,
+      conversationId: conversationId ?? this.conversationId,
+      senderRegistry: senderRegistry ?? this.senderRegistry,
       timestamp: timestamp ?? this.timestamp,
       isSender: isSender ?? this.isSender,
       timestampSend: timestampSend ?? this.timestampSend,
@@ -44,7 +52,8 @@ class MessageModel {
       'id': id,
       'text': text,
       'nameFrom': nameFrom,
-      'idFrom': idFrom,
+      'conversationId': conversationId,
+      'senderRegistry': senderRegistry,
       'timestamp': timestamp?.millisecondsSinceEpoch,
       'isSender': isSender,
       'timestampSend': timestampSend?.millisecondsSinceEpoch,
@@ -53,9 +62,10 @@ class MessageModel {
 
   Map<String, dynamic> sendToMap() {
     return {
+      'type': 'message',
+      'senderRegistry': GetIt.instance.get<UserModel>().registry,
+      'conversationId': conversationId,
       'text': text,
-      'nameFrom': nameFrom,
-      'idFrom': idFrom,
     };
   }
 
@@ -63,8 +73,9 @@ class MessageModel {
     return MessageModel(
       id: map['id'],
       text: map['text'] ?? '',
-      nameFrom: map['nameFrom'] ?? '',
-      idFrom: map['idFrom'] ?? '',
+      nameFrom: map['nameFrom'],
+      conversationId: map['conversationId'] ?? '',
+      senderRegistry: map['senderRegistry'] ?? '',
       timestamp: map['timestamp'] != null ? DateTime.fromMillisecondsSinceEpoch(map['timestamp']) : null,
       isSender: map['isSender'] ?? false,
       timestampSend: map['timestampSend'] != null ? DateTime.fromMillisecondsSinceEpoch(map['timestampSend']) : null,
@@ -77,7 +88,7 @@ class MessageModel {
 
   @override
   String toString() {
-    return 'Message(id: $id, text: $text, nameFrom: $nameFrom, idFrom: $idFrom, timestamp: $timestamp, isSender: $isSender, timestampSend: $timestampSend)';
+    return 'MessageModel(id: $id, text: $text, nameFrom: $nameFrom, conversationId: $conversationId, senderRegistry: $senderRegistry, timestamp: $timestamp, isSender: $isSender, timestampSend: $timestampSend)';
   }
 
   @override
@@ -88,7 +99,8 @@ class MessageModel {
         other.id == id &&
         other.text == text &&
         other.nameFrom == nameFrom &&
-        other.idFrom == idFrom &&
+        other.conversationId == conversationId &&
+        other.senderRegistry == senderRegistry &&
         other.timestamp == timestamp &&
         other.isSender == isSender &&
         other.timestampSend == timestampSend;
@@ -99,7 +111,8 @@ class MessageModel {
     return id.hashCode ^
         text.hashCode ^
         nameFrom.hashCode ^
-        idFrom.hashCode ^
+        conversationId.hashCode ^
+        senderRegistry.hashCode ^
         timestamp.hashCode ^
         isSender.hashCode ^
         timestampSend.hashCode;

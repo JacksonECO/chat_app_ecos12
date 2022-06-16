@@ -21,11 +21,18 @@ abstract class Date {
   }
 
   static Future<void> init() async {
-    var milliseconds = (await Rest.get())['timestamp'];
+    try {
+      var milliseconds = (await Rest.get())['timestamp'];
 
-    var locate = DateTime.now().toUtc();
-    var server = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+      var locate = DateTime.now().toUtc();
+      var server = DateTime.fromMillisecondsSinceEpoch(milliseconds);
 
-    errorTime = locate.difference(server);
+      errorTime = locate.difference(server);
+      print('Erro time: ' + errorTime.toString());
+    } catch (e) {
+      print('Connecting');
+      await Future.delayed(const Duration(seconds: 1));
+      return init();
+    }
   }
 }
