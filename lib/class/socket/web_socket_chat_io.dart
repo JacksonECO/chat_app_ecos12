@@ -42,6 +42,8 @@ class WebSocketChatIO implements WebSocketChat {
         if (input is String) {
           log(input, name: 'Server');
           onData(json.decode(input));
+        }else{
+          log(input, name: '_Server');
         }
       },
       onDone: () {

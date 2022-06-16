@@ -9,26 +9,28 @@ part 'chat_store.g.dart';
 class ChatStore = _ChatStoreBase with _$ChatStore;
 
 abstract class _ChatStoreBase with Store {
-  _ChatStoreBase(this.typeWebSocketChat) {
-    _messageStore.add(ConversationStore('4b98f912-f5f4-47e9-9c47-3ab75537a7ae', 'Grupo 1', true));
-    _messageStore.add(ConversationStore('d740efb6-1fd7-44c4-bd6a-43361839c421', 'Grupo 2', true));
-  }
-
   late WebSocketChat typeWebSocketChat;
 
+  _ChatStoreBase(this.typeWebSocketChat);
+
   @observable
-  ObservableList<ConversationStore> _messageStore = <ConversationStore>[].asObservable();
+  ObservableList<ConversationStore> _conversationStore = <ConversationStore>[].asObservable();
   @computed
-  List<ConversationStore> get listMessage => _messageStore.toList();
+  List<ConversationStore> get listConversation => _conversationStore.toList();
   @computed
   set messageStore(List<ConversationStore> messageStore) {
-    _messageStore = messageStore.asObservable();
+    _conversationStore = messageStore.asObservable();
   }
 
   @action
-  ConversationStore? getMessage(String idConversation) {
+  ConversationStore? getConversation(String idConversation) {
     // ignore: null_closures
-    return listMessage.firstWhere((element) => element.id == idConversation, orElse: null);
+    return listConversation.firstWhere((element) => element.id == idConversation, orElse: null);
+  }
+
+  @action
+  void cleanConversation() {
+    _conversationStore.clear();
   }
 
   @observable
@@ -49,7 +51,7 @@ abstract class _ChatStoreBase with Store {
     _socketChat!.listen((message) async {
       switch (message['type']) {
         case 'message':
-          for (var element in listMessage) {
+          for (var element in listConversation) {
             if (element.id == message['conversationId']) {
               element.addMessage(MessageModel.fromMap(message));
               break;
@@ -58,7 +60,7 @@ abstract class _ChatStoreBase with Store {
           break;
         case 'messages':
           for (var elementFrom in message['messages']) {
-            for (var element in listMessage) {
+            for (var element in listConversation) {
               if (element.id == elementFrom['conversationId']) {
                 element.history(MessageModel(
                   text: elementFrom['content'],

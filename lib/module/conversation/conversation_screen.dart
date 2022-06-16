@@ -25,7 +25,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   void initState() {
-    messageStore = GetIt.instance.get<ChatStore>().getMessage(widget.idConversation)!;
+    messageStore = GetIt.instance.get<ChatStore>().getConversation(widget.idConversation)!;
     super.initState();
   }
 
