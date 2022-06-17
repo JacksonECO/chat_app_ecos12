@@ -11,7 +11,7 @@ abstract class Rest {
   static const Duration timeoutBase = Duration(seconds: 5);
   static const String pathBase = '/api/v1';
 
-  static Future<Map<String, dynamic>> get({
+  static Future<dynamic> get({
     String? url,
     String path = '',
     Map<String, String> headers = const {},
@@ -38,7 +38,7 @@ abstract class Rest {
     throw ExceptionRest();
   }
 
-  static Future<Map<String, dynamic>> post({
+  static Future<dynamic> post({
     String? url,
     String path = '',
     Map<String, String> headers = const {},
@@ -63,7 +63,7 @@ abstract class Rest {
     if (handleException != null) {
       handleException(response);
     }
-    
+
     throw ExceptionRest();
   }
 }

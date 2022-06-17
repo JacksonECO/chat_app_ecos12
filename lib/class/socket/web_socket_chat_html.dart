@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:html';
 
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
@@ -59,7 +60,12 @@ class WebSocketChatHTML implements WebSocketChat {
 
     _streamSubscription = _socket!.onMessage.listen(
       (messageEvent) {
-        onData(json.decode(messageEvent.data));
+        if (messageEvent.data is String) {
+          log(messageEvent.data, name: 'Server');
+          onData(json.decode(messageEvent.data));
+        } else {
+          log(messageEvent.data, name: '_Server');
+        }
       },
       onDone: () {
         _socket = null;
@@ -74,6 +80,7 @@ class WebSocketChatHTML implements WebSocketChat {
   @override
   void send(Map<String, dynamic> dataStart) {
     if (_socket == null) throw 'Connect is close';
+    log(json.encode(dataStart), name: 'Client');
     _socket!.sendString(json.encode(dataStart));
   }
 

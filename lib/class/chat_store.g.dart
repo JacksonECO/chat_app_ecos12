@@ -70,6 +70,17 @@ mixin _$ChatStore on _ChatStoreBase, Store {
       ActionController(name: '_ChatStoreBase', context: context);
 
   @override
+  void addConversationStore(ConversationStore conversationStore) {
+    final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
+        name: '_ChatStoreBase.addConversationStore');
+    try {
+      return super.addConversationStore(conversationStore);
+    } finally {
+      _$_ChatStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   ConversationStore? getConversation(String idConversation) {
     final _$actionInfo = _$_ChatStoreBaseActionController.startAction(
         name: '_ChatStoreBase.getConversation');

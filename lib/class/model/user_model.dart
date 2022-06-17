@@ -3,7 +3,7 @@ import 'dart:convert';
 class UserModel {
   late String registry;
   late String nickname;
-  late String token;
+  String? token;
 
   bool get isValid {
     return true;
@@ -21,7 +21,7 @@ class UserModel {
     token = newUser.token;
   }
 
-  UserModel.init(){
+  UserModel.init() {
     registry = '';
     nickname = '';
     token = '';
@@ -55,9 +55,9 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      registry: map['registry'] ?? '',
-      nickname: map['nickname'] ?? '',
-      token: map['token'] ?? '',
+      registry: map['registry']!,
+      nickname: map['nickname']!,
+      token: map['token'],
     );
   }
 
@@ -71,11 +71,8 @@ class UserModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
-    return other is UserModel &&
-      other.registry == registry &&
-      other.nickname == nickname &&
-      other.token == token;
+
+    return other is UserModel && other.registry == registry && other.nickname == nickname && other.token == token;
   }
 
   @override

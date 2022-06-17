@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/class/model/message_model.dart';
+import 'package:ecos12_chat_app/class/user_name.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -18,8 +22,13 @@ abstract class _ChatStoreBase with Store {
   @computed
   List<ConversationStore> get listConversation => _conversationStore.toList();
   @computed
-  set messageStore(List<ConversationStore> messageStore) {
-    _conversationStore = messageStore.asObservable();
+  set conversationStore(List<ConversationStore> conversationStore) {
+    _conversationStore = conversationStore.asObservable();
+  }
+
+  @action
+  void addConversationStore(ConversationStore conversationStore) {
+    _conversationStore.add(conversationStore);
   }
 
   @action
@@ -63,12 +72,12 @@ abstract class _ChatStoreBase with Store {
             for (var element in listConversation) {
               if (element.id == elementFrom['conversationId']) {
                 element.history(MessageModel(
-                  text: elementFrom['content'],
-                  nameFrom: 'nameFrom',
+                  text: elementFrom['text'],
+                  nameFrom: await UserName.byRegistry(elementFrom['senderRegistry']),
                   conversationId: elementFrom['conversationId'],
-                  senderRegistry: elementFrom['senderId'],
+                  senderRegistry: elementFrom['senderRegistry'],
                   isSender: false, // Será redefinido depois
-                  timestamp: DateTime.parse(elementFrom['created_at']),
+                  timestamp: DateTime.fromMillisecondsSinceEpoch(elementFrom['timestamp']),
                 ));
                 break;
               }
@@ -77,8 +86,17 @@ abstract class _ChatStoreBase with Store {
 
           break;
         case 'conversations':
+          for (var element in message['conversations']) {
+            String title = element['creatorId'];
+            addConversationStore(ConversationStore(
+              element['id'],
+              await _nameByConversation(element),
+              element[title] != '' || element[title] != null,
+            ));
+          }
           break;
         case 'error':
+          log('', name: 'Error', error: message);
           break;
       }
     });
@@ -101,5 +119,23 @@ abstract class _ChatStoreBase with Store {
   Future<void> closeConnection() async {
     if (_socketChat == null) return;
     await _socketChat!.close();
+  }
+
+  @action
+  Future<String> _nameByConversation(Map map) async {
+    if (map['title'] != null) {
+      return map['title'];
+    }
+
+    final user = GetIt.I.get<UserModel>();
+
+    List<String> l = map['participantsRegistry'] ?? [];
+    l.remove(user.registry);
+
+    if (l.isEmpty) {
+      return 'Desconhecido';
+    }
+
+    return UserName.byRegistry(l.first);
   }
 }

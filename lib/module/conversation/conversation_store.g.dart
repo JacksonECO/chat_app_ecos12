@@ -16,6 +16,13 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
       (_$_userComputed ??= Computed<UserModel>(() => super._user,
               name: 'ConversationStoreBase._user'))
           .value;
+  Computed<ChatStore>? _$_chatComputed;
+
+  @override
+  ChatStore get _chat =>
+      (_$_chatComputed ??= Computed<ChatStore>(() => super._chat,
+              name: 'ConversationStoreBase._chat'))
+          .value;
   Computed<List<MessageModel>>? _$listMessageComputed;
 
   @override
@@ -63,6 +70,26 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
     });
   }
 
+  late final _$sendOnTapAsyncAction =
+      AsyncAction('ConversationStoreBase.sendOnTap', context: context);
+
+  @override
+  Future<void> sendOnTap(TextEditingController _controller,
+      {ConversationStore? thisStore, UserModel? newConversationUser}) {
+    return _$sendOnTapAsyncAction.run(() => super.sendOnTap(_controller,
+        thisStore: thisStore, newConversationUser: newConversationUser));
+  }
+
+  late final _$createConversationAsyncAction =
+      AsyncAction('ConversationStoreBase.createConversation', context: context);
+
+  @override
+  Future<bool> createConversation(
+      ConversationStore thisStore, UserModel newConversationUser) {
+    return _$createConversationAsyncAction
+        .run(() => super.createConversation(thisStore, newConversationUser));
+  }
+
   late final _$ConversationStoreBaseActionController =
       ActionController(name: 'ConversationStoreBase', context: context);
 
@@ -72,17 +99,6 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
         name: 'ConversationStoreBase.addAndOrderByMessage');
     try {
       return super.addAndOrderByMessage(message);
-    } finally {
-      _$ConversationStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void sendOnTap(TextEditingController _controller) {
-    final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
-        name: 'ConversationStoreBase.sendOnTap');
-    try {
-      return super.sendOnTap(_controller);
     } finally {
       _$ConversationStoreBaseActionController.endAction(_$actionInfo);
     }

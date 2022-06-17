@@ -13,14 +13,14 @@ void main() {
       user = await Register.call(
         name: 'Caio',
         registry: '2017010937',
-        password: '0123',
-        passwordConfirm: '0123',
+        password: '123',
+        passwordConfirm: '123',
       );
     } catch (_) {}
     try {
       user = await Login.signIn(
         registry: '2017010937',
-        password: '0123',
+        password: '123',
       );
     } catch (e) {}
     expect(user, true);
@@ -31,14 +31,14 @@ void main() {
       user = await Register.call(
         name: 'Jackson',
         registry: '2018010136',
-        password: '0123',
-        passwordConfirm: '0123',
+        password: '123',
+        passwordConfirm: '123',
       );
     } catch (_) {}
     try {
       user = await Login.signIn(
         registry: '2018010136',
-        password: '0123',
+        password: '123',
       );
     } catch (e) {}
     expect(user, true);

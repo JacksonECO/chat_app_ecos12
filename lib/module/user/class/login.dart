@@ -11,7 +11,7 @@ abstract class Login {
         path: '/login',
         body: {
           'registry': registry == '' ? '2017010937' : registry,
-          'password': password == '' ? '0123' : password,
+          'password': password == '' ? '123' : password,
         },
         handleException: (response) {
           throw ExceptionUserLogin();

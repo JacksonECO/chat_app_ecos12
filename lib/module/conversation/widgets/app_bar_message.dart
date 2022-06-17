@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class AppBarConversation extends AppBar {
   final String textTitle;
-  final String conversationID;
-  AppBarConversation({Key? key, required this.textTitle, required this.conversationID})
+  final String? conversationID;
+  AppBarConversation({Key? key, required this.textTitle, this.conversationID = ''})
       : super(
           key: key,
           backgroundColor: ColorApp.greenTurquoise,
@@ -33,9 +33,11 @@ class AppBarConversation extends AppBar {
                 ).image,
               ),
               Box(10),
-              Text(
-                textTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              Expanded(
+                child: Text(
+                  textTitle,
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                ),
               ),
             ],
           ),

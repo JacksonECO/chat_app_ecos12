@@ -1,3 +1,4 @@
+import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/app_bar_message.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/input_text_message.dart';
@@ -5,16 +6,17 @@ import 'package:ecos12_chat_app/module/conversation/widgets/message_tile.dart';
 import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
-
-import 'package:ecos12_chat_app/class/chat_store.dart';
 
 class ConversationScreen extends StatefulWidget {
-  final String idConversation;
-  const ConversationScreen(
-    this.idConversation, {
+  final ConversationStore? conversation;
+  final UserModel? newConversationUser;
+
+  const ConversationScreen({
+    this.conversation,
     Key? key,
-  }) : super(key: key);
+    this.newConversationUser,
+  })  : assert(conversation != null || newConversationUser != null),
+        super(key: key);
 
   @override
   State<ConversationScreen> createState() => _ConversationScreenState();
@@ -25,7 +27,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   void initState() {
-    messageStore = GetIt.instance.get<ChatStore>().getConversation(widget.idConversation)!;
+    if (widget.conversation != null) {
+      messageStore = widget.conversation!;
+    } else {
+      messageStore = ConversationStore(null, widget.newConversationUser!.nickname, false);
+    }
     super.initState();
   }
 
@@ -65,7 +71,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                   ),
                 );
               }),
-              InputTextMessage(messageStore: messageStore),
+              InputTextMessage(messageStore: messageStore, newConversationUser: widget.newConversationUser),
             ],
           ),
         ],

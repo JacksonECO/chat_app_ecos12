@@ -37,10 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBarHome(),
       body: Observer(
         builder: (context) {
-          return ListView.separated(
-            separatorBuilder: (context, index) => const Divider(
-              color: ColorApp.greenTurquoise,
-            ),
+          return ListView.builder(
+            // separatorBuilder: (context, index) => const Divider(
+            //   color: ColorApp.greenTurquoise,
+            // ),
             itemCount: store.listConversation.length,
             itemBuilder: (context, index) {
               return Observer(builder: (context) {
@@ -52,12 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage('https://picsum.photos/id/$index/200/300.jpg'),
                     ),
-                    title:
-                        Text(store.listConversation[index].title, style: const TextStyle(fontWeight: FontWeight.w500)),
+                    title: Text(store.listConversation[index].title,
+                        style: const TextStyle(fontWeight: FontWeight.w500), maxLines: 1),
                     subtitle: Text(
                       store.listConversation[index].lastMessage == null
                           ? ''
                           : store.listConversation[index].lastMessage!.text,
+                      maxLines: 2,
                     ),
                     trailing: Text(
                       store.listConversation[index].lastMessage == null
@@ -66,12 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               store.listConversation[index].lastMessage!.timestamp ??
                                   store.listConversation[index].lastMessage!.timestampSend!,
                             ),
+                      maxLines: 1,
                     ),
                   ),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) => ConversationScreen(store.listConversation[index].id),
+                        builder: (BuildContext context) =>
+                            ConversationScreen(conversation: store.listConversation[index]),
                       ),
                     );
                   },

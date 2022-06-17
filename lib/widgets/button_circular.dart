@@ -2,8 +2,10 @@ import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:flutter/material.dart';
 
 class ButtonCircular extends StatefulWidget {
-  final String text;
-  final Future<void> Function()? onTap;
+  final String? text;
+  final Widget? child;
+
+  final Function()? onTap;
   final Color? colorButton;
   final double radius;
   final double? fontSize;
@@ -13,7 +15,8 @@ class ButtonCircular extends StatefulWidget {
 
   const ButtonCircular({
     Key? key,
-    required this.text,
+    this.text,
+    this.child,
     this.onTap,
     this.colorButton,
     this.radius = 25,
@@ -21,7 +24,8 @@ class ButtonCircular extends StatefulWidget {
     this.width = 250,
     this.height = 55,
     this.isAnimation = true,
-  }) : super(key: key);
+  })  : assert(text != null || child != null),
+        super(key: key);
 
   @override
   State<ButtonCircular> createState() => _ButtonCircularState();
@@ -88,10 +92,11 @@ class _ButtonCircularState extends State<ButtonCircular> with SingleTickerProvid
                     ),
                   )
                 : Center(
-                    child: Text(
-                      widget.text,
-                      style: TextStyle(fontSize: widget.fontSize, color: Colors.white),
-                    ),
+                    child: widget.child ??
+                        Text(
+                          widget.text!,
+                          style: TextStyle(fontSize: widget.fontSize, color: Colors.white),
+                        ),
                   ),
           ),
         );
