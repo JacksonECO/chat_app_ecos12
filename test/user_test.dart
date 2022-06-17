@@ -4,43 +4,76 @@ import 'package:ecos12_chat_app/module/user/class/register.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 
+import 'package:faker/faker.dart';
+
 /// Cria caso não exita e realiza o login
 void main() {
   GetIt.I.registerSingleton<UserModel>(UserModel.init());
   test('User: Caio', () async {
-    var user = false;
-    try {
-      user = await Register.call(
-        name: 'Caio',
-        registry: '2017010937',
-        password: '123',
-        passwordConfirm: '123',
-      );
-    } catch (_) {}
-    try {
-      user = await Login.signIn(
-        registry: '2017010937',
-        password: '123',
-      );
-    } catch (e) {}
+    final user = await _registerOrLogin(nome: 'Caio', registry: '2017010937');
     expect(user, true);
   });
   test('User: Jackson', () async {
-    var user = false;
-    try {
-      user = await Register.call(
-        name: 'Jackson',
-        registry: '2018010136',
-        password: '123',
-        passwordConfirm: '123',
-      );
-    } catch (_) {}
-    try {
-      user = await Login.signIn(
-        registry: '2018010136',
-        password: '123',
-      );
-    } catch (e) {}
+    final user = await _registerOrLogin(nome: 'Jackson', registry: '2018010136');
     expect(user, true);
   });
+
+  test('New User Random', () async {
+    final user = await newUserRandom();
+    expect(user, true);
+  });
+}
+
+Future<bool> _registerOrLogin({required String nome, required String registry, String password = '123'}) async {
+  bool user = false;
+  try {
+    user = await Login.signIn(
+      registry: registry,
+      password: password,
+    );
+  } catch (_) {}
+  if (user) return true;
+
+  try {
+    user = await Register.call(
+      name: nome,
+      registry: registry,
+      password: password,
+      passwordConfirm: password,
+    );
+  } catch (_) {}
+  try {
+    user = await Login.signIn(
+      registry: registry,
+      password: password,
+    );
+  } catch (_) {}
+  return user;
+}
+
+Future<bool> newUserRandom({String password = '123'}) async {
+  var faker = Faker();
+  bool user = false;
+
+  final nome = faker.person.firstName() + ' ' + faker.person.lastName();
+  final registry = faker.randomGenerator.integer(99999, min: 10000).toString();
+
+  print('User: $nome');
+  print('Registry: $registry');
+
+  try {
+    user = await Register.call(
+      name: nome,
+      registry: registry,
+      password: password,
+      passwordConfirm: password,
+    );
+  } catch (_) {}
+  try {
+    user = await Login.signIn(
+      registry: registry,
+      password: password,
+    );
+  } catch (_) {}
+  return user;
 }

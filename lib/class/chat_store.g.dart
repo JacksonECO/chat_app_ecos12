@@ -66,6 +66,14 @@ mixin _$ChatStore on _ChatStoreBase, Store {
     return _$closeConnectionAsyncAction.run(() => super.closeConnection());
   }
 
+  late final _$_addConversationAsyncAction =
+      AsyncAction('_ChatStoreBase._addConversation', context: context);
+
+  @override
+  Future<void> _addConversation(Map<dynamic, dynamic> map) {
+    return _$_addConversationAsyncAction.run(() => super._addConversation(map));
+  }
+
   late final _$_ChatStoreBaseActionController =
       ActionController(name: '_ChatStoreBase', context: context);
 

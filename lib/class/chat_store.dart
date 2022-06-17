@@ -60,10 +60,30 @@ abstract class _ChatStoreBase with Store {
     _socketChat!.listen((message) async {
       switch (message['type']) {
         case 'message':
+          var isFinded = false;
           for (var element in listConversation) {
             if (element.id == message['conversationId']) {
+              isFinded = true;
               element.addMessage(MessageModel.fromMap(message));
               break;
+            }
+          }
+
+          if (!isFinded) {
+            /// Primeira mensagem de uma 'conversation' nova
+            //TODO: Ideal uma nova rota da API
+            final List conversations = await Rest.get(path: '/conversations');
+            for (var element in conversations) {
+              if (element['id'] == message['conversationId']) {
+                await _addConversation(element);
+                for (var element in listConversation) {
+                  if (element.id == message['conversationId']) {
+                    element.addMessage(MessageModel.fromMap(message));
+                    break;
+                  }
+                }
+                break;
+              }
             }
           }
           break;
@@ -87,12 +107,7 @@ abstract class _ChatStoreBase with Store {
           break;
         case 'conversations':
           for (var element in message['conversations']) {
-            String title = element['creatorId'];
-            addConversationStore(ConversationStore(
-              element['id'],
-              await _nameByConversation(element),
-              element[title] != '' || element[title] != null,
-            ));
+            _addConversation(element);
           }
           break;
         case 'error':
@@ -106,13 +121,6 @@ abstract class _ChatStoreBase with Store {
   void sendMessage(MessageModel data) {
     if (_socketChat == null) print('Sem Conexão');
     _socketChat!.send(data.sendToMap());
-    // _socketChat!.send({
-    //   'type': 'message',
-    //   // 'id': 100,
-    //   'senderRegistry': '2018010136',
-    //   'conversationId': '4a9143ac-26a7-424e-a9e9-16d1e7115260',
-    //   'text': data.text,
-    // });
   }
 
   @action
@@ -122,20 +130,28 @@ abstract class _ChatStoreBase with Store {
   }
 
   @action
-  Future<String> _nameByConversation(Map map) async {
-    if (map['title'] != null) {
-      return map['title'];
+  Future<void> _addConversation(Map map) async {
+    String title = 'Desconhecido';
+    bool isGroup = false;
+
+    if (map['title'] != '' && map['title'] != null) {
+      title = map['title'];
+      isGroup = true;
+    } else {
+      final user = GetIt.I.get<UserModel>();
+
+      List l = map['participantsRegistry'] ?? [];
+      l.remove(user.registry);
+
+      if (l.isNotEmpty) {
+        title = await UserName.byRegistry(l.first);
+      }
     }
 
-    final user = GetIt.I.get<UserModel>();
-
-    List<String> l = map['participantsRegistry'] ?? [];
-    l.remove(user.registry);
-
-    if (l.isEmpty) {
-      return 'Desconhecido';
-    }
-
-    return UserName.byRegistry(l.first);
+    addConversationStore(ConversationStore(
+      map['id'],
+      title,
+      isGroup,
+    ));
   }
 }

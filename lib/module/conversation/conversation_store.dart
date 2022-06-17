@@ -102,7 +102,7 @@ abstract class ConversationStoreBase with Store {
         'participantsRegistry': [_user.registry, newConversationUser.registry],
       });
 
-      //TODO: retirar esta parte depois de fazer melhoria na rota anterir para retornar o id da conversa
+      //TODO: retirar esta parte depois de fazer melhoria na rota anterior para retornar o id da conversa
       final listConversation = (await Rest.get(path: '/conversations')) as List<dynamic>;
       _id = listConversation.last['id'];
 
@@ -144,7 +144,9 @@ abstract class ConversationStoreBase with Store {
   @action
   void upScroll() {
     Future.delayed(const Duration(milliseconds: 200), () {
-      controllerScroll.jumpTo(0);
+      try {
+        controllerScroll.jumpTo(0);
+      } catch (_) {}
     });
   }
 }

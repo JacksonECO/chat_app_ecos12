@@ -1,4 +1,3 @@
-import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:ecos12_chat_app/class/chat_store.dart';
 import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/module/home/widgets/app_bar_home.dart';
