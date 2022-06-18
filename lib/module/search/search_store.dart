@@ -39,6 +39,24 @@ abstract class _SearchStoreBase with Store {
     return temp;
   }
 
+  @observable
+  ObservableSet<UserModel> _listUserSelected = <UserModel>{}.asObservable();
+
+  @computed
+  List<UserModel> get listUserSelected {
+    return _listUserSelected.toList();
+  }
+
+  @action
+  void addUserSelected(UserModel user) {
+    _listUserSelected.add(user);
+  }
+
+  @action
+  void removeUserSelected(UserModel user) {
+    _listUserSelected.remove(user);
+  }
+
   @action
   Future<void> _requestAllUsers() async {
     final List users = await Rest.get(path: '/users');

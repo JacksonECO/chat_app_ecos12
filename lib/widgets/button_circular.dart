@@ -75,10 +75,12 @@ class _ButtonCircularState extends State<ButtonCircular> with SingleTickerProvid
                       await widget.onTap!();
                       await Future.delayed(const Duration(milliseconds: 100));
                     }
-                    if (widget.isAnimation) controller.reverse();
-                    setState(() {
-                      _isLoading = false;
-                    });
+                    try {
+                      if (widget.isAnimation) controller.reverse();
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    } catch (_) {}
                   },
             child: _isLoading
                 ? Center(

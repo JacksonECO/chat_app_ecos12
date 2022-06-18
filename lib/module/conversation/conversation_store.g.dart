@@ -85,9 +85,10 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
 
   @override
   Future<bool> createConversation(
-      ConversationStore thisStore, UserModel newConversationUser) {
-    return _$createConversationAsyncAction
-        .run(() => super.createConversation(thisStore, newConversationUser));
+      ConversationStore thisStore, List<UserModel> newConversationUser,
+      [String? title]) {
+    return _$createConversationAsyncAction.run(
+        () => super.createConversation(thisStore, newConversationUser, title));
   }
 
   late final _$ConversationStoreBaseActionController =

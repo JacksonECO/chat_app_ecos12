@@ -8,15 +8,20 @@ class MenuItens extends PopupMenuItem {
     IconData? icon,
     required String text,
   }) : super(
-          child: ButtonSimple(
-            onTap: onTap,
-            child: Row(
-              children: [
-                Icon(icon, color: Colors.black),
-                const SizedBox(width: 20),
-                Text(text),
-              ],
-            ),
-          ),
+          child: Builder(builder: (context) {
+            return ButtonSimple(
+              onTap: () {
+                Navigator.pop(context);
+                if (onTap != null) onTap();
+              },
+              child: Row(
+                children: [
+                  Icon(icon, color: Colors.black),
+                  const SizedBox(width: 20),
+                  Text(text),
+                ],
+              ),
+            );
+          }),
         );
 }

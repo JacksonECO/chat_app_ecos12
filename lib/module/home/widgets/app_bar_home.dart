@@ -1,5 +1,6 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
 import 'package:ecos12_chat_app/module/home/widgets/menu_item.dart';
+import 'package:ecos12_chat_app/module/search/new_group_screen1.dart';
 import 'package:ecos12_chat_app/module/search/search_screen.dart';
 import 'package:ecos12_chat_app/module/user/login_screen.dart';
 import 'package:ecos12_chat_app/widgets/button_simple.dart';
@@ -34,7 +35,14 @@ class AppBarHome extends AppBar {
                   MenuItens(
                     text: 'Novo Grupo',
                     icon: Icons.group_add_outlined,
-                    onTap: () => print('New Group'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NewGroupScreen1(),
+                        ),
+                      );
+                    },
                   ),
                   MenuItens(
                     text: 'Buscar Alunos',

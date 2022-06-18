@@ -39,7 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
             return ListTile(
               leading: CircleAvatar(
                 backgroundImage: Image.network(
-                  'https://picsum.photos/200/300',
+                  'https://picsum.photos/id/$index/200/300.jpg',
                   fit: BoxFit.fill,
                 ).image,
               ),
@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (a.length == 2) {
                     if (a.contains(GetIt.instance.get<UserModel>().registry) &&
                         a.contains(store.listUser[index].registry)) {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ConversationScreen(

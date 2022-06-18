@@ -22,6 +22,13 @@ mixin _$SearchStore on _SearchStoreBase, Store {
       (_$listUserComputed ??= Computed<List<UserModel>>(() => super.listUser,
               name: '_SearchStoreBase.listUser'))
           .value;
+  Computed<List<UserModel>>? _$listUserSelectedComputed;
+
+  @override
+  List<UserModel> get listUserSelected => (_$listUserSelectedComputed ??=
+          Computed<List<UserModel>>(() => super.listUserSelected,
+              name: '_SearchStoreBase.listUserSelected'))
+      .value;
 
   late final _$_searchAtom =
       Atom(name: '_SearchStoreBase._search', context: context);
@@ -55,6 +62,22 @@ mixin _$SearchStore on _SearchStoreBase, Store {
     });
   }
 
+  late final _$_listUserSelectedAtom =
+      Atom(name: '_SearchStoreBase._listUserSelected', context: context);
+
+  @override
+  ObservableSet<UserModel> get _listUserSelected {
+    _$_listUserSelectedAtom.reportRead();
+    return super._listUserSelected;
+  }
+
+  @override
+  set _listUserSelected(ObservableSet<UserModel> value) {
+    _$_listUserSelectedAtom.reportWrite(value, super._listUserSelected, () {
+      super._listUserSelected = value;
+    });
+  }
+
   late final _$_requestAllUsersAsyncAction =
       AsyncAction('_SearchStoreBase._requestAllUsers', context: context);
 
@@ -78,10 +101,33 @@ mixin _$SearchStore on _SearchStoreBase, Store {
   }
 
   @override
+  void addUserSelected(UserModel user) {
+    final _$actionInfo = _$_SearchStoreBaseActionController.startAction(
+        name: '_SearchStoreBase.addUserSelected');
+    try {
+      return super.addUserSelected(user);
+    } finally {
+      _$_SearchStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeUserSelected(UserModel user) {
+    final _$actionInfo = _$_SearchStoreBaseActionController.startAction(
+        name: '_SearchStoreBase.removeUserSelected');
+    try {
+      return super.removeUserSelected(user);
+    } finally {
+      _$_SearchStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 search: ${search},
-listUser: ${listUser}
+listUser: ${listUser},
+listUserSelected: ${listUserSelected}
     ''';
   }
 }

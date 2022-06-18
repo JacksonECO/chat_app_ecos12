@@ -72,7 +72,7 @@ abstract class ConversationStoreBase with Store {
     if (id == null) {
       if (thisStore == null) throw 'thisStore not found';
       if (newConversationUser == null) throw 'receiver not found';
-      final isContinue = await createConversation(thisStore, newConversationUser);
+      final isContinue = await createConversation(thisStore, [newConversationUser]);
       if (!isContinue) {
         throw 'create conversation failed';
       }
@@ -94,18 +94,19 @@ abstract class ConversationStoreBase with Store {
   }
 
   @action
-  Future<bool> createConversation(ConversationStore thisStore, UserModel newConversationUser) async {
+  Future<bool> createConversation(ConversationStore thisStore, List<UserModel> newConversationUser,
+      [String? title]) async {
     try {
       final api = await Rest.post(path: '/conversations', body: {
         'creatorRegistry': _user.registry,
-        'title': null,
-        'participantsRegistry': [_user.registry, newConversationUser.registry],
+        'title': title,
+        'participantsRegistry': [
+          _user.registry,
+          ...newConversationUser.map((e) => e.registry).toList(),
+        ],
       });
 
-      //TODO: retirar esta parte depois de fazer melhoria na rota anterior para retornar o id da conversa
-      final listConversation = (await Rest.get(path: '/conversations')) as List<dynamic>;
-      _id = listConversation.last['id'];
-
+      _id = api['id'];
       _chat.addConversationStore(thisStore);
 
       return true;
