@@ -1,16 +1,13 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
-import 'package:ecos12_chat_app/class/chat_store.dart';
+import 'package:ecos12_chat_app/module/home/widgets/menu_item.dart';
 import 'package:ecos12_chat_app/module/search/search_screen.dart';
 import 'package:ecos12_chat_app/module/user/login_screen.dart';
-import 'package:ecos12_chat_app/widgets/box.dart';
 import 'package:ecos12_chat_app/widgets/button_simple.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class AppBarHome extends AppBar {
-  AppBarHome({Key? key})
+  AppBarHome({super.key})
       : super(
-          key: key,
           backgroundColor: ColorApp.greenTurquoise,
           foregroundColor: Colors.white,
           actions: [
@@ -27,21 +24,44 @@ class AppBarHome extends AppBar {
                 },
               );
             }),
-            Box(15),
-            Builder(builder: (context) {
-              return ButtonSimple(
-                child: const Icon(Icons.menu, size: 25),
-                onTap: () {
-                  GetIt.instance.get<ChatStore>().closeConnection();
-
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute<void>(builder: (BuildContext context) => const LoginScreen()),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-              );
-            }),
-            Box(15),
+            // Box(15),
+            PopupMenuButton<void>(
+              padding: EdgeInsets.zero,
+              splashRadius: 0.0001,
+              tooltip: '',
+              itemBuilder: (context) {
+                return [
+                  MenuItens(
+                    text: 'Novo Grupo',
+                    icon: Icons.group_add_outlined,
+                    onTap: () => print('New Group'),
+                  ),
+                  MenuItens(
+                    text: 'Buscar Alunos',
+                    icon: Icons.search_rounded,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const PopupMenuDivider(height: 10),
+                  MenuItens(
+                    text: 'Sair',
+                    icon: Icons.logout_outlined,
+                    onTap: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute<void>(builder: (BuildContext context) => const LoginScreen()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
+                ];
+              },
+            )
           ],
           toolbarHeight: 65,
           elevation: 15,
