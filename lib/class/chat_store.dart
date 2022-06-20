@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'dart:developer';
 
 import 'package:ecos12_chat_app/class/model/user_model.dart';
@@ -8,6 +10,7 @@ import 'package:ecos12_chat_app/class/user_name.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 part 'chat_store.g.dart';
 
 class ChatStore = _ChatStoreBase with _$ChatStore;
@@ -20,21 +23,57 @@ abstract class _ChatStoreBase with Store {
   @observable
   ObservableList<ConversationStore> _conversationStore = <ConversationStore>[].asObservable();
   @computed
-  List<ConversationStore> get listConversation => _conversationStore.toList();
-  @computed
-  set conversationStore(List<ConversationStore> conversationStore) {
-    _conversationStore = conversationStore.asObservable();
+  List<ConversationStore> get listConversation {
+    return _conversationStore.toList();
   }
 
   @action
   void addConversationStore(ConversationStore conversationStore) {
     _conversationStore.add(conversationStore);
+    sort();
+  }
+
+  @action
+  Future<void> sort() async {
+    _conversationStore.sort((ConversationStore a, ConversationStore b) {
+      if (a.lastMessage == null && b.lastMessage == null) return 0;
+
+      if (a.lastMessage == null) return -1;
+      if (b.lastMessage == null) return 1;
+
+      if (a.lastMessage!.timestamp == null || b.lastMessage!.timestamp == null) {
+        if (a.lastMessage!.timestamp == null && b.lastMessage!.timestamp == null) {
+          if (a.lastMessage!.timestampSend!.isBefore(b.lastMessage!.timestampSend!)) return 1;
+          if (a.lastMessage!.timestampSend!.isAfter(b.lastMessage!.timestampSend!)) return -1;
+          return 0;
+        }
+
+        if (a.lastMessage!.timestamp == null) {
+          if (a.lastMessage!.timestampSend!.isBefore(b.lastMessage!.timestamp!)) return 1;
+          if (a.lastMessage!.timestampSend!.isAfter(b.lastMessage!.timestamp!)) return -1;
+          return 0;
+        }
+        if (b.lastMessage!.timestamp == null) {
+          if (a.lastMessage!.timestamp!.isBefore(b.lastMessage!.timestampSend!)) return 1;
+          if (a.lastMessage!.timestamp!.isAfter(b.lastMessage!.timestampSend!)) return -1;
+          return 0;
+        }
+      }
+
+      if (a.lastMessage!.timestamp!.isBefore(b.lastMessage!.timestamp!)) return 1;
+      if (a.lastMessage!.timestamp!.isAfter(b.lastMessage!.timestamp!)) return -1;
+      return 0;
+    });
   }
 
   @action
   ConversationStore? getConversation(String idConversation) {
     // ignore: null_closures
-    return listConversation.firstWhere((element) => element.id == idConversation, orElse: null);
+    try {
+      return listConversation.firstWhere((element) => element.id == idConversation, orElse: null);
+    } catch (_) {
+      return null;
+    }
   }
 
   @action
@@ -52,9 +91,16 @@ abstract class _ChatStoreBase with Store {
     _socketChat = typeWebSocketChat;
     await _socketChat!.connect();
 
+    String? clientIp;
+
+    try {
+      clientIp = await NetworkInfo().getWifiIP();
+    } catch (_) {}
+
     _socketChat!.send({
       'type': 'sync',
       'token': GetIt.instance.get<UserModel>().token,
+      'clientIp': clientIp,
     });
 
     _socketChat!.listen((message) async {
@@ -73,7 +119,8 @@ abstract class _ChatStoreBase with Store {
             /// Primeira mensagem de uma 'conversation' nova
             //TODO: Ideal uma nova rota da API
             final List conversations = await Rest.get(path: '/conversations');
-            for (var element in conversations) {
+            for (int i = 0; i < conversations.length; i++) {
+              var element = conversations[i];
               if (element['id'] == message['conversationId']) {
                 await _addConversation(element);
                 for (var element in listConversation) {
@@ -86,24 +133,39 @@ abstract class _ChatStoreBase with Store {
               }
             }
           }
+          await sort();
           break;
         case 'messages':
           for (var elementFrom in message['messages']) {
-            for (var element in listConversation) {
-              if (element.id == elementFrom['conversationId']) {
-                element.history(MessageModel(
-                  text: elementFrom['text'],
-                  nameFrom: await UserName.byRegistry(elementFrom['senderRegistry']),
-                  conversationId: elementFrom['conversationId'],
-                  senderRegistry: elementFrom['senderRegistry'],
-                  isSender: false, // Será redefinido depois
-                  timestamp: DateTime.fromMillisecondsSinceEpoch(elementFrom['timestamp']),
-                ));
-                break;
+            var element = getConversation(elementFrom['conversationId']);
+            if (element == null) {
+              await Future.delayed(const Duration(milliseconds: 50));
+              element = getConversation(elementFrom['conversationId']);
+              if (element == null) {
+                await Future.delayed(const Duration(milliseconds: 100));
+                element = getConversation(elementFrom['conversationId']);
+                if (element == null) {
+                  await Future.delayed(const Duration(milliseconds: 250));
+                  element = getConversation(elementFrom['conversationId']);
+                }
               }
             }
+            if (element == null) {
+              print('Falha ao encontrar conversação');
+              continue;
+            }
+
+            element.history(MessageModel(
+              text: elementFrom['text'],
+              nameFrom: await UserName.byRegistry(elementFrom['senderRegistry']),
+              conversationId: elementFrom['conversationId'],
+              senderRegistry: elementFrom['senderRegistry'],
+              isSender: false, // Será redefinido depois
+              timestamp: DateTime.fromMillisecondsSinceEpoch(elementFrom['timestamp']),
+            ));
           }
 
+          await sort();
           break;
         case 'conversations':
           for (var element in message['conversations']) {
@@ -132,12 +194,22 @@ abstract class _ChatStoreBase with Store {
   @action
   Future<void> _addConversation(Map map) async {
     String title = 'Desconhecido';
-    bool isGroup = false;
 
     if (map['title'] != '' && map['title'] != null) {
       title = map['title'];
-      isGroup = true;
+
+      addConversationStore(ConversationStore(
+        map['id'],
+        title,
+        true,
+      ));
     } else {
+      addConversationStore(ConversationStore(
+        map['id'],
+        'Carregando...',
+        false,
+      ));
+
       final user = GetIt.I.get<UserModel>();
 
       List l = map['participantsRegistry'] ?? [];
@@ -146,12 +218,8 @@ abstract class _ChatStoreBase with Store {
       if (l.isNotEmpty) {
         title = await UserName.byRegistry(l.first);
       }
-    }
 
-    addConversationStore(ConversationStore(
-      map['id'],
-      title,
-      isGroup,
-    ));
+      getConversation(map['id'])!.title = title;
+    }
   }
 }

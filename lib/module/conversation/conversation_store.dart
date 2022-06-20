@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields
+
 import 'dart:developer';
 
 import 'package:ecos12_chat_app/class/chat_store.dart';
@@ -15,7 +17,7 @@ abstract class ConversationStoreBase with Store {
   String? _id;
   String? get id => _id;
 
-  final String title;
+  String title;
   final bool isGroup;
 
   ConversationStoreBase(this._id, this.title, this.isGroup);
@@ -33,10 +35,6 @@ abstract class ConversationStoreBase with Store {
   ObservableList<MessageModel> _listMessage = <MessageModel>[].asObservable();
   @computed
   List<MessageModel> get listMessage => _listMessage.toList();
-  @computed
-  set listMessage(List<MessageModel> messageStore) {
-    _listMessage = messageStore.asObservable();
-  }
 
   @computed
   MessageModel? get lastMessage {
@@ -44,25 +42,22 @@ abstract class ConversationStoreBase with Store {
   }
 
   @action
-  void addAndOrderByMessage(MessageModel message) {
-    var temp = listMessage;
-    // listMessage.add(message);
-    listMessage.insert(0, message);
-    // listMessage.sort(((a, b) {
-    //   if (a.timestamp == null && b.timestamp == null) {
-    //     if (a.timestampSend!.isBefore(b.timestampSend!)) return 1;
-    //     if (a.timestampSend!.isAfter(b.timestampSend!)) return -1;
-    //     return 0;
-    //   }
+  void _addAndOrderByMessage(MessageModel message) {
+    _listMessage.insert(0, message);
+    listMessage.sort(((a, b) {
+      if (a.timestamp == null && b.timestamp == null) {
+        if (a.timestampSend!.isBefore(b.timestampSend!)) return 1;
+        if (a.timestampSend!.isAfter(b.timestampSend!)) return -1;
+        return 0;
+      }
 
-    //   if (a.timestamp == null) return -1;
-    //   if (b.timestamp == null) return 1;
+      if (a.timestamp == null) return -1;
+      if (b.timestamp == null) return 1;
 
-    //   if (a.timestamp!.isBefore(b.timestamp!)) return 1;
-    //   if (a.timestamp!.isAfter(b.timestamp!)) return -1;
-    //   return 0;
-    // }));
-    listMessage = temp;
+      if (a.timestamp!.isBefore(b.timestamp!)) return 1;
+      if (a.timestamp!.isAfter(b.timestamp!)) return -1;
+      return 0;
+    }));
   }
 
   @action
@@ -91,6 +86,7 @@ abstract class ConversationStoreBase with Store {
 
     addMessage(newMessage);
     _chat.sendMessage(newMessage);
+    return;
   }
 
   @action
@@ -130,8 +126,9 @@ abstract class ConversationStoreBase with Store {
       }
     }
 
-    print(newMessage);
-    addAndOrderByMessage(newMessage);
+    // print(newMessage);
+    _addAndOrderByMessage(newMessage);
+    _chat.sort();
     upScroll();
   }
 
@@ -139,14 +136,14 @@ abstract class ConversationStoreBase with Store {
   void history(MessageModel newMessage) {
     newMessage.isSender = _user.registry == newMessage.senderRegistry;
 
-    addAndOrderByMessage(newMessage);
+    _addAndOrderByMessage(newMessage);
   }
 
   @action
   void upScroll() {
     Future.delayed(const Duration(milliseconds: 200), () {
       try {
-        controllerScroll.jumpTo(0);
+        if (controllerScroll.hasClients) controllerScroll.jumpTo(0);
       } catch (_) {}
     });
   }

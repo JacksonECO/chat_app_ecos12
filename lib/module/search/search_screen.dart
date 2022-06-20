@@ -33,6 +33,11 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: Observer(builder: (_) {
+        if (store.listUser.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(),
+          );
+        }
         return ListView.builder(
           itemCount: store.listUser.length,
           itemBuilder: (_, index) {

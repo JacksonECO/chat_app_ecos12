@@ -36,13 +36,21 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBarHome(),
       body: Observer(
         builder: (context) {
+          //? Empty Screen
+          if (store.listConversation.isEmpty) {
+            return const Center(
+              child: Text('Sem Mensagens'),
+            );
+          }
           return ListView.builder(
-            // separatorBuilder: (context, index) => const Divider(
-            //   color: ColorApp.greenTurquoise,
-            // ),
+            shrinkWrap: true,
             itemCount: store.listConversation.length,
             itemBuilder: (context, index) {
               return Observer(builder: (context) {
+                //? Não exibir conversas sem mensagens (exceto grupos)
+                if (store.listConversation[index].lastMessage == null && !store.listConversation[index].isGroup) {
+                  return const SizedBox();
+                }
                 return ButtonSimple(
                   child: ListTile(
                     key: Key(store.listConversation[index].lastMessage != null
@@ -51,8 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage('https://picsum.photos/id/$index/200/300.jpg'),
                     ),
-                    title: Text(store.listConversation[index].title,
-                        style: const TextStyle(fontWeight: FontWeight.w500), maxLines: 1),
+                    title: Text(
+                      store.listConversation[index].title,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                    ),
                     subtitle: Text(
                       store.listConversation[index].lastMessage == null
                           ? ''

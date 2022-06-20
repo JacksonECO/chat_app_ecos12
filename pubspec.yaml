@@ -38,6 +38,11 @@ dependencies:
   mobx: ^2.0.7
   flutter_mobx: ^2.0.5
   http: ^0.13.4
+  network_info_plus: ^2.1.3
+
+  isar: ^2.5.0
+  isar_flutter_libs: ^2.5.0
+  path_provider: ^2.0.10
 
 dev_dependencies:
   flutter_test:

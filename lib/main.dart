@@ -20,9 +20,7 @@ Future<void> start(WebSocketChat webSocketChat) async {
   DotEnvApp.init();
   Date.init();
 
-  ChatStore chat = ChatStore(webSocketChat);
-
-  GetIt.I.registerSingleton<ChatStore>(chat);
+  GetIt.I.registerSingleton<ChatStore>(ChatStore(webSocketChat));
   GetIt.I.registerSingleton<UserModel>(UserModel.init());
 
   runApp(const MyApp());

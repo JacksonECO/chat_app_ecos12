@@ -95,11 +95,11 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
       ActionController(name: 'ConversationStoreBase', context: context);
 
   @override
-  void addAndOrderByMessage(MessageModel message) {
+  void _addAndOrderByMessage(MessageModel message) {
     final _$actionInfo = _$ConversationStoreBaseActionController.startAction(
-        name: 'ConversationStoreBase.addAndOrderByMessage');
+        name: 'ConversationStoreBase._addAndOrderByMessage');
     try {
-      return super.addAndOrderByMessage(message);
+      return super._addAndOrderByMessage(message);
     } finally {
       _$ConversationStoreBaseActionController.endAction(_$actionInfo);
     }

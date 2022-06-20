@@ -1,4 +1,5 @@
 import 'package:ecos12_chat_app/app/color_app.dart';
+import 'package:ecos12_chat_app/widgets/button_simple.dart';
 import 'package:flutter/material.dart';
 
 class ButtonCircular extends StatefulWidget {
@@ -61,26 +62,24 @@ class _ButtonCircularState extends State<ButtonCircular> with SingleTickerProvid
           ),
           width: animation.value,
           height: widget.height,
-          child: InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+          child: ButtonSimple(
             onTap: _isLoading
                 ? () {}
                 : () async {
                     setState(() {
                       _isLoading = true;
                     });
-                    if (widget.isAnimation) controller.forward();
-                    if (widget.onTap != null) {
-                      await widget.onTap!();
-                      await Future.delayed(const Duration(milliseconds: 100));
-                    }
                     try {
+                      if (widget.isAnimation) controller.forward();
+                      if (widget.onTap != null) {
+                        await widget.onTap!();
+                        await Future.delayed(const Duration(milliseconds: 100));
+                      }
                       if (widget.isAnimation) controller.reverse();
-                      setState(() {
-                        _isLoading = false;
-                      });
                     } catch (_) {}
+                    setState(() {
+                      _isLoading = false;
+                    });
                   },
             child: _isLoading
                 ? Center(

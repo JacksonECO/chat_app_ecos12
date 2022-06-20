@@ -50,6 +50,14 @@ mixin _$ChatStore on _ChatStoreBase, Store {
     });
   }
 
+  late final _$sortAsyncAction =
+      AsyncAction('_ChatStoreBase.sort', context: context);
+
+  @override
+  Future<void> sort() {
+    return _$sortAsyncAction.run(() => super.sort());
+  }
+
   late final _$startWebSocketAsyncAction =
       AsyncAction('_ChatStoreBase.startWebSocket', context: context);
 
