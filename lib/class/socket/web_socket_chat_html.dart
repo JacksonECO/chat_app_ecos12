@@ -17,7 +17,7 @@ class WebSocketChatHTML implements WebSocketChat {
   bool isWeb = true;
 
   @override
-  Future<void> close([int? code]) async {
+  Future<void> close() async {
     if (_socket != null) {
       print('Closing connection');
       await _streamSubscription?.cancel();
@@ -35,13 +35,10 @@ class WebSocketChatHTML implements WebSocketChat {
 
     _socket!.onClose.listen((event) async {
       print('Connect closed');
+      await close();
     });
 
     var init = _socket!.onOpen.listen((event) {
-      // send({
-      //   'type': 'Start',
-      //   'id': 'html',
-      // });
       _startPing();
       start = true;
     });
@@ -91,7 +88,4 @@ class WebSocketChatHTML implements WebSocketChat {
       _socket!.sendString('{}');
     }
   }
-
-  @override
-  WebSocketChat clone() => WebSocketChatHTML();
 }

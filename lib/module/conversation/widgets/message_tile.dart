@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 
 class MessageTile extends StatelessWidget {
   final MessageModel message;
+  final bool isGroup;
   const MessageTile({
     Key? key,
     required this.message,
+    required this.isGroup,
   }) : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class MessageTile extends StatelessWidget {
       alignment: message.isSender ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-        padding: const EdgeInsets.fromLTRB(10, 7, 8, 8),
+        padding: const EdgeInsets.fromLTRB(10, 3, 8, 8),
         decoration: BoxDecoration(
           color: message.isSender ? Colors.green[300] : Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -27,6 +29,13 @@ class MessageTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            Visibility(
+              visible: isGroup && !message.isSender && message.nameFrom != null,
+              child: Text(
+                message.nameFrom ?? '',
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.brown),
+              ),
+            ),
             SelectableText(
               message.text + '      ',
               style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w600),
@@ -43,24 +52,6 @@ class MessageTile extends StatelessWidget {
                   ),
           ],
         ),
-
-        /*
-        child: Stack(alignment: Alignment.bottomRight, children: [
-          Column(
-            children: [
-              SelectableText(
-                message.text + "      ",
-                style: TextStyle(height: 1.5, fontSize: 16),
-              ),
-              Box(17),
-            ],
-          ),
-          Text(
-            dateHours(message.date),
-            style: TextStyle(fontSize: 13),
-          )
-        ]),
-        */
       ),
     );
   }

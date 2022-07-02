@@ -20,6 +20,10 @@ abstract class Date {
     return date.toLocal().add(errorTime);
   }
 
+  static DateTime dateServer() {
+    return DateTime.now().toUtc().subtract(errorTime);
+  }
+
   static Future<void> init() async {
     try {
       var milliseconds = (await Rest.get())['timestamp'];

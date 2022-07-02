@@ -14,10 +14,10 @@ class WebSocketChatIO implements WebSocketChat {
   bool isWeb = false;
 
   @override
-  Future<void> close([int? code]) async {
+  Future<void> close() async {
     if (_socket != null) {
       print('Closing connection');
-      await _socket!.close(code);
+      await _socket!.close();
       _socket = null;
     }
   }
@@ -63,6 +63,4 @@ class WebSocketChatIO implements WebSocketChat {
     _socket!.add(json.encode(data));
   }
 
-  @override
-  WebSocketChat clone() => WebSocketChatIO();
 }

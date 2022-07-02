@@ -1,11 +1,13 @@
 import 'package:ecos12_chat_app/class/chat_store.dart';
 import 'package:ecos12_chat_app/class/date.dart';
+import 'package:ecos12_chat_app/class/socket/peer_server.dart';
 import 'package:ecos12_chat_app/module/home/widgets/app_bar_home.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_screen.dart';
 import 'package:ecos12_chat_app/widgets/button_simple.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,18 +17,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ChatStore store = GetIt.instance.get<ChatStore>();
+  final ChatStore store = GetIt.instance.get<ChatStore>();
+  final peerServer = PeerServer();
 
   @override
   void initState() {
     store.startWebSocket();
     super.initState();
+
+    NetworkInfo().getWifiIP().then((ip) {
+      peerServer.connect(ip);
+    });
   }
 
   @override
   void dispose() {
     store.closeConnection();
     store.cleanConversation();
+    peerServer.close();
     super.dispose();
   }
 

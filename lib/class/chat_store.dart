@@ -2,8 +2,11 @@
 
 import 'dart:developer';
 
+import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/class/rest.dart';
+import 'package:ecos12_chat_app/class/socket/peer_server.dart';
+import 'package:ecos12_chat_app/class/socket/peer_system.dart';
 import 'package:ecos12_chat_app/class/socket/web_socket_chat.dart';
 import 'package:ecos12_chat_app/class/model/message_model.dart';
 import 'package:ecos12_chat_app/class/user_name.dart';
@@ -84,6 +87,9 @@ abstract class _ChatStoreBase with Store {
   @observable
   WebSocketChat? _socketChat;
 
+  @observable
+  PeerServer _peer = PeerServer();
+
   @action
   Future<void> startWebSocket() async {
     if (_socketChat != null) await _socketChat!.close();
@@ -93,9 +99,14 @@ abstract class _ChatStoreBase with Store {
 
     String? clientIp;
 
-    try {
-      clientIp = await NetworkInfo().getWifiIP();
-    } catch (_) {}
+    if (!_socketChat!.isWeb) {
+      try {
+        clientIp = await NetworkInfo().getWifiIP();
+        await _peer.connect(clientIp);
+      } catch (e, s) {
+        print(s);
+      }
+    }
 
     _socketChat!.send({
       'type': 'sync',
@@ -125,7 +136,10 @@ abstract class _ChatStoreBase with Store {
                 await _addConversation(element);
                 for (var element in listConversation) {
                   if (element.id == message['conversationId']) {
-                    element.addMessage(MessageModel.fromMap(message));
+                    element.addMessage(MessageModel.fromMap(message)
+                      ..nameFrom = await UserName.byRegistry(
+                        message['senderRegistry'],
+                      ));
                     break;
                   }
                 }
@@ -181,8 +195,15 @@ abstract class _ChatStoreBase with Store {
 
   @action
   void sendMessage(MessageModel data) {
-    if (_socketChat == null) print('Sem Conexão');
-    _socketChat!.send(data.sendToMap());
+    if (data.conversationId.contains('secret:')) {
+      PeerSystem.send({
+        ...data.sendToMap(),
+        'timestamp': Date.dateServer().millisecondsSinceEpoch,
+      }, data.conversationId.substring(7));
+    } else {
+      if (_socketChat == null) print('Sem Conexão');
+      _socketChat!.send(data.sendToMap());
+    }
   }
 
   @action

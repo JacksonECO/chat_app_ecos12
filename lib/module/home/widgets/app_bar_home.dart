@@ -56,6 +56,18 @@ class AppBarHome extends AppBar {
                       );
                     },
                   ),
+                  MenuItens(
+                    text: 'Peer-to-Peer',
+                    icon: Icons.search_rounded,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchScreen(isSecret: true),
+                        ),
+                      );
+                    },
+                  ),
                   const PopupMenuDivider(height: 10),
                   MenuItens(
                     text: 'Sair',

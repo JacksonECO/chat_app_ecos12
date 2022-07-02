@@ -1,4 +1,6 @@
 import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/class/socket/peer_client.dart';
+import 'package:ecos12_chat_app/class/socket/peer_system.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/app_bar_message.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/input_text_message.dart';
@@ -10,11 +12,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 class ConversationScreen extends StatefulWidget {
   final ConversationStore? conversation;
   final UserModel? newConversationUser;
+  final String? secretRegistry;
 
   const ConversationScreen({
     this.conversation,
     Key? key,
     this.newConversationUser,
+    this.secretRegistry,
   })  : assert(conversation != null || newConversationUser != null),
         super(key: key);
 
@@ -33,6 +37,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
       messageStore = ConversationStore(null, widget.newConversationUser!.nickname, false);
     }
     super.initState();
+
+    print(widget.secretRegistry);
+
+    if (widget.secretRegistry != null) {
+      final socketPeer = PeerSystem.getSocketByRegistry(widget.secretRegistry!);
+      if (socketPeer == null) {
+        print('socketPeer is null');
+        // NetworkInfo().getWifiIP().then((ip) {
+        // if (ip == '192.168.232.2') {
+        PeerClient().connect('200.235.92.207', widget.secretRegistry);
+        // } else {
+        // PeerClient().connect('192.168.232.2', widget.secretRegistry);
+        // }
+        // });
+      }
+    }
   }
 
   @override
@@ -66,7 +86,10 @@ class _ConversationScreenState extends State<ConversationScreen> {
                       semanticChildCount: messageStore.listMessage.length,
                       shrinkWrap: true,
                       itemCount: messageStore.listMessage.length,
-                      itemBuilder: (context, index) => MessageTile(message: messageStore.listMessage[index]),
+                      itemBuilder: (context, index) => MessageTile(
+                        message: messageStore.listMessage[index],
+                        isGroup: messageStore.isGroup,
+                      ),
                     ),
                   ),
                 );
