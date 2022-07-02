@@ -27,7 +27,7 @@ class MessageTile extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.6,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Visibility(
               visible: isGroup && !message.isSender && message.nameFrom != null,
@@ -36,20 +36,25 @@ class MessageTile extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.brown),
               ),
             ),
-            SelectableText(
-              message.text + '      ',
-              style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w600),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SelectableText(
+                  message.text + '      ',
+                  style: const TextStyle(height: 1.5, fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                Box(5),
+                message.timestamp == null
+                    ? Box(10,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 1,
+                        ))
+                    : Text(
+                        Date.hoursWithMinute(message.timestamp!),
+                        style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
+                      ),
+              ],
             ),
-            Box(5),
-            message.timestamp == null
-                ? Box(10,
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 1,
-                    ))
-                : Text(
-                    Date.hoursWithMinute(message.timestamp!),
-                    style: const TextStyle(fontSize: 13, color: Colors.black54, fontWeight: FontWeight.w400),
-                  ),
           ],
         ),
       ),

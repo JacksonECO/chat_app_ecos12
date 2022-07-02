@@ -121,7 +121,9 @@ abstract class _ChatStoreBase with Store {
           for (var element in listConversation) {
             if (element.id == message['conversationId']) {
               isFinded = true;
-              element.addMessage(MessageModel.fromMap(message));
+              element.addMessage(
+                MessageModel.fromMap(message)..nameFrom = await UserName.byRegistry(message['senderRegistry']),
+              );
               break;
             }
           }
@@ -136,10 +138,9 @@ abstract class _ChatStoreBase with Store {
                 await _addConversation(element);
                 for (var element in listConversation) {
                   if (element.id == message['conversationId']) {
-                    element.addMessage(MessageModel.fromMap(message)
-                      ..nameFrom = await UserName.byRegistry(
-                        message['senderRegistry'],
-                      ));
+                    element.addMessage(
+                      MessageModel.fromMap(message)..nameFrom = await UserName.byRegistry(message['senderRegistry']),
+                    );
                     break;
                   }
                 }
