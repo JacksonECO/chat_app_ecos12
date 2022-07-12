@@ -82,7 +82,11 @@ class _NewGroupScreen2State extends State<NewGroupScreen2> {
         tooltip: 'Criar Grupo',
         child: ButtonCircular(
           onTap: () async {
-            final newGroup = ConversationStore(null, titleController.text, true);
+            final newGroup = ConversationStore(
+              id: null,
+              title: titleController.text,
+              isGroup: true,
+            );
             await newGroup.createConversation(newGroup, widget.listUsersSelection, titleController.text);
             Navigator.pop(context);
             Navigator.pushReplacement(

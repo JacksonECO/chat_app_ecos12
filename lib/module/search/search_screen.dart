@@ -69,9 +69,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     );
                   } else {
                     GetIt.instance.get<ChatStore>().addConversationStore(ConversationStore(
-                          _idConversation,
-                          'Privado: ${store.listUser[index].nickname}',
-                          false,
+                          id: _idConversation,
+                          title: 'Privado: ${store.listUser[index].nickname}',
+                          isGroup: false,
                         ));
                     Navigator.pushReplacement(
                       context,

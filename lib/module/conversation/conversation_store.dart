@@ -20,7 +20,7 @@ abstract class ConversationStoreBase with Store {
   String title;
   final bool isGroup;
 
-  ConversationStoreBase(this._id, this.title, this.isGroup);
+  ConversationStoreBase({String? id, required this.title, required this.isGroup}) : _id = id;
 
   @observable
   ScrollController controllerScroll = ScrollController();

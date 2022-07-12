@@ -220,15 +220,15 @@ abstract class _ChatStoreBase with Store {
       title = map['title'];
 
       addConversationStore(ConversationStore(
-        map['id'],
-        title,
-        true,
+        id: map['id'],
+        title: title,
+        isGroup: true,
       ));
     } else {
       addConversationStore(ConversationStore(
-        map['id'],
-        'Carregando...',
-        false,
+        id: map['id'],
+        title: 'Carregando...',
+        isGroup: false,
       ));
 
       final user = GetIt.I.get<UserModel>();

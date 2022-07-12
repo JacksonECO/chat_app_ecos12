@@ -136,9 +136,9 @@ abstract class PeerSystem {
         } else {
           chat.addConversationStore(
             ConversationStore(
-              conversationId,
-              'Privado: ...',
-              false,
+              id: conversationId,
+              title: 'Privado: ...',
+              isGroup: false,
             )..addMessage(MessageModel.fromMap(data)),
           );
 

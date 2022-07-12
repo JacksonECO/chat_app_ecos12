@@ -35,7 +35,11 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (widget.conversation != null) {
       messageStore = widget.conversation!;
     } else {
-      messageStore = ConversationStore(null, widget.newConversationUser!.nickname, false);
+      messageStore = ConversationStore(
+        id: null,
+        title: widget.newConversationUser!.nickname,
+        isGroup: false,
+      );
     }
     super.initState();
 
