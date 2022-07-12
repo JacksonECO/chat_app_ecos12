@@ -18,11 +18,14 @@ class ConversationStore = ConversationStoreBase with _$ConversationStore;
 abstract class ConversationStoreBase with Store {
   String? _id;
   String? get id => _id;
-
-  String title;
   final bool isGroup;
 
-  ConversationStoreBase({String? id, required this.title, required this.isGroup}) : _id = id;
+  @observable
+  String title;
+  @observable
+  String? secretRegistry;
+
+  ConversationStoreBase({String? id, required this.title, required this.isGroup, this.secretRegistry}) : _id = id;
 
   @observable
   ScrollController controllerScroll = ScrollController();

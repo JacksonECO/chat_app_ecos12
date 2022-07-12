@@ -38,6 +38,38 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
               name: 'ConversationStoreBase.lastMessage'))
       .value;
 
+  late final _$titleAtom =
+      Atom(name: 'ConversationStoreBase.title', context: context);
+
+  @override
+  String get title {
+    _$titleAtom.reportRead();
+    return super.title;
+  }
+
+  @override
+  set title(String value) {
+    _$titleAtom.reportWrite(value, super.title, () {
+      super.title = value;
+    });
+  }
+
+  late final _$secretRegistryAtom =
+      Atom(name: 'ConversationStoreBase.secretRegistry', context: context);
+
+  @override
+  String? get secretRegistry {
+    _$secretRegistryAtom.reportRead();
+    return super.secretRegistry;
+  }
+
+  @override
+  set secretRegistry(String? value) {
+    _$secretRegistryAtom.reportWrite(value, super.secretRegistry, () {
+      super.secretRegistry = value;
+    });
+  }
+
   late final _$controllerScrollAtom =
       Atom(name: 'ConversationStoreBase.controllerScroll', context: context);
 
@@ -141,6 +173,8 @@ mixin _$ConversationStore on ConversationStoreBase, Store {
   @override
   String toString() {
     return '''
+title: ${title},
+secretRegistry: ${secretRegistry},
 controllerScroll: ${controllerScroll},
 listMessage: ${listMessage},
 lastMessage: ${lastMessage}

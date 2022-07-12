@@ -37,11 +37,12 @@ class _ConversationScreenState extends State<ConversationScreen> {
         id: null,
         title: widget.newConversationUser!.nickname,
         isGroup: false,
+        secretRegistry: widget.secretRegistry,
       );
     }
     super.initState();
 
-    messageStore.ifPeerToPeerCreate(widget.secretRegistry).then((value) {
+    messageStore.ifPeerToPeerCreate(widget.secretRegistry ?? messageStore.secretRegistry).then((value) {
       if (!value) DialogConversation.showDialogPeerConnectionInvalid(context);
     });
   }
