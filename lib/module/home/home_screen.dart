@@ -25,9 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
     store.startWebSocket();
     super.initState();
 
-    NetworkInfo().getWifiIP().then((ip) {
-      peerServer.connect(ip);
-    });
+    if (store.isWeb == false) {
+      NetworkInfo().getWifiIP().then((ip) {
+        peerServer.connect(ip);
+      });
+    }
   }
 
   @override

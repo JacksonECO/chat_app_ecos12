@@ -6,6 +6,8 @@ import 'package:ecos12_chat_app/class/chat_store.dart';
 import 'package:ecos12_chat_app/class/model/message_model.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
 import 'package:ecos12_chat_app/class/rest.dart';
+import 'package:ecos12_chat_app/class/socket/peer_client.dart';
+import 'package:ecos12_chat_app/class/socket/peer_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -146,5 +148,22 @@ abstract class ConversationStoreBase with Store {
         if (controllerScroll.hasClients) controllerScroll.jumpTo(0);
       } catch (_) {}
     });
+  }
+
+  Future<bool> ifPeerToPeerCreate(String? secretRegistry) async {
+    if (secretRegistry == null) return true;
+    try {
+      final socketPeer = PeerSystem.getSocketByRegistry(secretRegistry);
+      if (socketPeer == null) {
+        await Rest.get(path: '/peer-to-peer/$secretRegistry').then((value) {
+          if (value['userIp'] == '0.0.0.0') throw 'userIp not found';
+          PeerClient().connect(value['userIp'], secretRegistry, value['token']);
+        });
+      }
+      return true;
+    } catch (e, s) {
+      log('Error conversation Peer-to-Peer', name: 'Conversation', error: e, stackTrace: s);
+      return false;
+    }
   }
 }

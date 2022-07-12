@@ -86,7 +86,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   return;
                 }
 
-                //TODO: Melhorar
                 final users = await Rest.get(path: '/conversations');
 
                 for (var element in users) {

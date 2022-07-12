@@ -1,9 +1,7 @@
 import 'package:ecos12_chat_app/class/model/user_model.dart';
-import 'package:ecos12_chat_app/class/rest.dart';
-import 'package:ecos12_chat_app/class/socket/peer_client.dart';
-import 'package:ecos12_chat_app/class/socket/peer_system.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/app_bar_message.dart';
+import 'package:ecos12_chat_app/module/conversation/widgets/dialog_conversation.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/input_text_message.dart';
 import 'package:ecos12_chat_app/module/conversation/widgets/message_tile.dart';
 import 'package:ecos12_chat_app/widgets/box.dart';
@@ -43,16 +41,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
     }
     super.initState();
 
-    print(widget.secretRegistry);
-
-    if (widget.secretRegistry != null) {
-      final socketPeer = PeerSystem.getSocketByRegistry(widget.secretRegistry!);
-      if (socketPeer == null) {
-        Rest.get(path: '/peer-to-peer/${widget.secretRegistry}').then((value) {
-          PeerClient().connect(value['userIp'], widget.secretRegistry, value['token']);
-        });
-      }
-    }
+    messageStore.ifPeerToPeerCreate(widget.secretRegistry).then((value) {
+      if (!value) DialogConversation.showDialogPeerConnectionInvalid(context);
+    });
   }
 
   @override

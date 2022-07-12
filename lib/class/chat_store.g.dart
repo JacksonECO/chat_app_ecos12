@@ -17,6 +17,12 @@ mixin _$ChatStore on _ChatStoreBase, Store {
               () => super.listConversation,
               name: '_ChatStoreBase.listConversation'))
           .value;
+  Computed<bool?>? _$isWebComputed;
+
+  @override
+  bool? get isWeb => (_$isWebComputed ??=
+          Computed<bool?>(() => super.isWeb, name: '_ChatStoreBase.isWeb'))
+      .value;
 
   late final _$_conversationStoreAtom =
       Atom(name: '_ChatStoreBase._conversationStore', context: context);
@@ -47,6 +53,21 @@ mixin _$ChatStore on _ChatStoreBase, Store {
   set _socketChat(WebSocketChat? value) {
     _$_socketChatAtom.reportWrite(value, super._socketChat, () {
       super._socketChat = value;
+    });
+  }
+
+  late final _$_peerAtom = Atom(name: '_ChatStoreBase._peer', context: context);
+
+  @override
+  PeerServer get _peer {
+    _$_peerAtom.reportRead();
+    return super._peer;
+  }
+
+  @override
+  set _peer(PeerServer value) {
+    _$_peerAtom.reportWrite(value, super._peer, () {
+      super._peer = value;
     });
   }
 
@@ -132,7 +153,8 @@ mixin _$ChatStore on _ChatStoreBase, Store {
   @override
   String toString() {
     return '''
-listConversation: ${listConversation}
+listConversation: ${listConversation},
+isWeb: ${isWeb}
     ''';
   }
 }

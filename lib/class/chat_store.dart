@@ -87,6 +87,9 @@ abstract class _ChatStoreBase with Store {
   @observable
   WebSocketChat? _socketChat;
 
+  @computed
+  bool? get isWeb => _socketChat?.isWeb;
+
   @observable
   PeerServer _peer = PeerServer();
 
@@ -111,7 +114,7 @@ abstract class _ChatStoreBase with Store {
     _socketChat!.send({
       'type': 'sync',
       'token': GetIt.instance.get<UserModel>().token,
-      'userIp': clientIp,
+      'userIp': clientIp ?? '0.0.0.0',
     });
 
     _socketChat!.listen((message) async {
