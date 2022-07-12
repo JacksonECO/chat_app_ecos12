@@ -4,6 +4,8 @@ abstract class DialogConversation {
   static showDialogPeerConnectionInvalid(BuildContext context) {
     showDialog(
       context: context,
+      barrierDismissible: false,
+      useRootNavigator: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Destinatário desconectado'),
@@ -15,12 +17,11 @@ abstract class DialogConversation {
               child: const Text('Voltar'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
               },
             ),
           ],
         );
       },
-    );
+    ).then((value) => Navigator.of(context).pop());
   }
 }
