@@ -4,9 +4,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:ecos12_chat_app/class/chat_store.dart';
-import 'package:ecos12_chat_app/class/date.dart';
 import 'package:ecos12_chat_app/class/model/message_model.dart';
 import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/user_name.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
 import 'package:get_it/get_it.dart';
@@ -14,7 +14,7 @@ import 'package:get_it/get_it.dart';
 abstract class PeerSystem {
   static final List<Map<String, dynamic>> _list = [];
 
-  static void addServer(RawSocket socket) {
+  static void addClient(RawSocket socket) {
     List _cache = [];
     bool start = false;
     final int id = _list.length;
@@ -24,7 +24,7 @@ abstract class PeerSystem {
       'start': start,
     });
 
-    socket.listen((RawSocketEvent event) {
+    socket.listen((RawSocketEvent event) async {
       switch (event) {
         case RawSocketEvent.closed:
           log(RawSocketEvent.closed.toString(), name: 'PeerServer');
@@ -38,7 +38,7 @@ abstract class PeerSystem {
             log(string, name: 'PeerServer/Read');
 
             if (map['type'] == 'sync' && !start) {
-              start = _configUser(map, id);
+              start = await _configUser(map, id);
               if (start) {
                 _list[id]['start'] = true;
 
@@ -64,7 +64,7 @@ abstract class PeerSystem {
     });
   }
 
-  static void addClient(RawSocket socket, String registry) {
+  static void addServer(RawSocket socket, String registry) {
     final int id = _list.length;
 
     _list.add({
@@ -72,11 +72,6 @@ abstract class PeerSystem {
       'start': true,
       'peerRegistry': registry,
     });
-
-    socket.write(jsonEncode({
-      'type': 'sync',
-      'peerRegistry': GetIt.instance.get<UserModel>().registry,
-    }).codeUnits);
 
     socket.listen((RawSocketEvent event) {
       switch (event) {
@@ -103,12 +98,19 @@ abstract class PeerSystem {
     });
   }
 
-  static bool _configUser(Map<String, dynamic> map, int id) {
-    final save = _list[id];
-    if (map['peerRegistry'] == null) return false;
+  static Future<bool> _configUser(Map<String, dynamic> map, int id) async {
+    try {
+      final save = _list[id];
+      if (map['peerRegistry'] == null) return false;
 
-    save['peerRegistry'] = map['peerRegistry'];
-    // save['conversationId'] = 'secret:${map['peer_registry']}';
+      save['peerRegistry'] = map['peerRegistry'];
+      await Rest.post(path: '/peer-to-peer', body: {
+        'registry': map['peerRegistry'],
+        'token': map['token'],
+      });
+    } catch (_) {
+      return false;
+    }
     return true;
   }
 

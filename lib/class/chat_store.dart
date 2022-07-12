@@ -111,7 +111,7 @@ abstract class _ChatStoreBase with Store {
     _socketChat!.send({
       'type': 'sync',
       'token': GetIt.instance.get<UserModel>().token,
-      'clientIp': clientIp,
+      'userIp': clientIp,
     });
 
     _socketChat!.listen((message) async {

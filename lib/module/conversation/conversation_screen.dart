@@ -1,4 +1,5 @@
 import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:ecos12_chat_app/class/rest.dart';
 import 'package:ecos12_chat_app/class/socket/peer_client.dart';
 import 'package:ecos12_chat_app/class/socket/peer_system.dart';
 import 'package:ecos12_chat_app/module/conversation/conversation_store.dart';
@@ -43,14 +44,9 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (widget.secretRegistry != null) {
       final socketPeer = PeerSystem.getSocketByRegistry(widget.secretRegistry!);
       if (socketPeer == null) {
-        print('socketPeer is null');
-        // NetworkInfo().getWifiIP().then((ip) {
-        // if (ip == '192.168.232.2') {
-        PeerClient().connect('200.235.92.207', widget.secretRegistry);
-        // } else {
-        // PeerClient().connect('192.168.232.2', widget.secretRegistry);
-        // }
-        // });
+        Rest.get(path: '/peer-to-peer/${widget.secretRegistry}').then((value) {
+          PeerClient().connect(value['userIp'], widget.secretRegistry, value['token']);
+        });
       }
     }
   }

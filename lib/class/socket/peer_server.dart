@@ -19,7 +19,7 @@ class PeerServer extends WebSocketChat {
     print('Server listening on port ${_server!.port}');
     _server!.listen((RawSocket user) {
       log('New Connection', name: 'Server');
-      PeerSystem.addServer(user);
+      PeerSystem.addClient(user);
     });
   }
 
