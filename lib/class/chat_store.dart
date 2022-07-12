@@ -130,7 +130,6 @@ abstract class _ChatStoreBase with Store {
 
           if (!isFinded) {
             /// Primeira mensagem de uma 'conversation' nova
-            //TODO: Ideal uma nova rota da API
             final List conversations = await Rest.get(path: '/conversations');
             for (int i = 0; i < conversations.length; i++) {
               var element = conversations[i];

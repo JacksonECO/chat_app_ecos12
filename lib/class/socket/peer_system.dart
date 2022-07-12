@@ -13,11 +13,12 @@ import 'package:get_it/get_it.dart';
 
 abstract class PeerSystem {
   static final List<Map<String, dynamic>> _list = [];
+  static int idSocketCounter = 0;
 
   static void addClient(RawSocket socket) {
     List _cache = [];
     bool start = false;
-    final int id = _list.length;
+    final int id = idSocketCounter++;
 
     _list.add({
       'socket': socket,
@@ -27,6 +28,7 @@ abstract class PeerSystem {
     socket.listen((RawSocketEvent event) async {
       switch (event) {
         case RawSocketEvent.closed:
+          _list.removeAt(id);
           log(RawSocketEvent.closed.toString(), name: 'PeerServer');
           break;
         case RawSocketEvent.read:
@@ -65,7 +67,7 @@ abstract class PeerSystem {
   }
 
   static void addServer(RawSocket socket, String registry) {
-    final int id = _list.length;
+    final int id = idSocketCounter++;
 
     _list.add({
       'socket': socket,
@@ -76,6 +78,7 @@ abstract class PeerSystem {
     socket.listen((RawSocketEvent event) {
       switch (event) {
         case RawSocketEvent.closed:
+          _list.removeAt(id);
           log(RawSocketEvent.closed.toString(), name: 'PeerClient');
           break;
         case RawSocketEvent.read:
