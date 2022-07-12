@@ -14,6 +14,9 @@ abstract class Login {
           'password': password == '' ? '123' : password,
         },
         handleException: (response) {
+          if (response.statusCode == 400) {
+            throw ExceptionUserLoginInvalid();
+          }
           throw ExceptionUserLogin();
         },
       );
