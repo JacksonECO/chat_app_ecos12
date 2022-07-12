@@ -20,6 +20,7 @@ abstract class MessageUser {
         ),
         backgroundColor: status.backgroundColor,
         duration: time,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -48,6 +49,7 @@ abstract class MessageUser {
         ),
         backgroundColor: StatusMessageUser.error.backgroundColor,
         duration: time,
+        behavior: SnackBarBehavior.floating,
       ),
     );
     return false;
