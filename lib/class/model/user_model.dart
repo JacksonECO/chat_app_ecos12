@@ -24,7 +24,7 @@ class UserModel {
   UserModel.init() {
     registry = '';
     nickname = '';
-    token = '';
+    token = null;
   }
 
   UserModel({

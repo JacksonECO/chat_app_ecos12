@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:ecos12_chat_app/app/dot_env_app.dart';
 import 'package:ecos12_chat_app/app/exception_app.dart';
+import 'package:ecos12_chat_app/class/model/user_model.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 class ExceptionRest extends ExceptionApp {}
@@ -22,7 +24,11 @@ abstract class Rest {
 
     var response = await http.get(
       Uri.https(url, pathBase + path),
-      headers: {...headerBase, ...headers},
+      headers: {
+        ...headerBase,
+        ...headers,
+        'access_token': GetIt.instance.get<UserModel>().token ?? '',
+      },
     ).timeout(timeout);
 
     if (response.statusCode == 200) {
@@ -51,7 +57,11 @@ abstract class Rest {
     var response = await http.post(
       Uri.https(url, pathBase + path),
       body: json.encode(body),
-      headers: {...headerBase, ...headers},
+      headers: {
+        ...headerBase,
+        ...headers,
+        'access_token': GetIt.instance.get<UserModel>().token ?? '',
+      },
     ).timeout(timeout);
 
     if (response.statusCode == 200) {
